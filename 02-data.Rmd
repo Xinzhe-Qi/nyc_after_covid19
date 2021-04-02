@@ -1,2 +1,7 @@
 # Data sources
 
+We use NYC’s weekly data on regional operating business licenses to compare trends immediately before the pandemic (Jan-Feb 2020), the peak of the pandemic (Apr-Mar 2020) and a period of recovery (Jan-Feb 2021). To enrich our analysis, we can draw Census Bureau’s ACS data to incorporate other demographic and economic data. These values can be control variables when we compare the changes in trends and demographic across the neighborhoods in NYC.
+
+- [Legally operating businesses in NYC](https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh) (weekly data by zipcode & census tract from the municipal government)  
+- [Applications for new business licenses in NYC](https://data.cityofnewyork.us/Business/License-Applications/ptev-4hud) (weekly data by zipcode)
+- Census Bureau’s [ACS data](https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/)
