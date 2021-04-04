@@ -1,1 +1,14 @@
 # Data transformation
+
+## Read Data
+```{r}
+#install.packages("RSocrata")
+library("RSocrata") # read data using API
+license = read.socrata("https://data.cityofnewyork.us/resource/ptev-4hud.json?city='NEW YORK'&$limit=10")
+license
+```
+
+```{r}
+business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=address_state='NY'&$limit=10")
+business
+```
