@@ -4,13 +4,15 @@
 ```{r}
 #install.packages("RSocrata")
 library("RSocrata") # read data using API
-license = read.socrata("https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2020-01-01' and '2021-05-01' and city='NEW YORK'")
+license = read.socrata("https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and city='NEW YORK'")
 head(license)
 ```
-
 
 
 ```{r}
 business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2020-01-01' and '2021-05-01' and address_state='NY' and license_status='Active'")
 head(business)
 ```
+
+
+

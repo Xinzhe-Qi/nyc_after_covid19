@@ -1,1 +1,20 @@
 # Results
+
+```{r}
+library(tidyverse)
+month_year_lic = license %>% 
+  mutate(start_month=format(start_date, "%m"), 
+         start_year=format(start_date, "%Y")) %>% 
+  group_by(start_year, start_month) %>% 
+  summarize(count=n())
+month_year_lic
+```
+
+```{r}
+ggplot(data = month_year_lic, 
+            aes(x = start_month, y = count, 
+                group = start_year, colour = start_year)) + 
+  geom_line()
+```
+
+
