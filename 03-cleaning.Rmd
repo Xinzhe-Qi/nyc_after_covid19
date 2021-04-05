@@ -2,21 +2,56 @@
 
 ## Read Data
 
+### Processing business license data from NYC OpenData
+
 The Scrata's API (an official third-party provider that powers NYC Open Data) provides a query language called the “Socrata Query Language” or “SoQL”. See technical details [here](https://dev.socrata.com/docs/queries/). With carefully designed queries, we can pull down data which are pre-processed on the server side. 
 
+For example, the following query will download data from January 2017 to May 2021 (or latest available) with the filing address in NY state. 
 
-Variables included in the dataset on new business license applications.
-```{r}
-#install.packages("RSocrata")
-library("RSocrata") # read data using API
-license = read.socrata("https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and city='NEW YORK'")
-str(license)
+```{r, eval=FALSE, echo=TRUE}
+library("RSocrata") # load the RSocrata package
+license = read.socrata(
+  "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state='NY'")
 ```
 
-Variables included in the dataset on legally operating businesses.
+
+Note that the source data do not offer clean information where the business is actually located as licensees can register with any mailing or permanent address that need not be in NYC. The below shows the first ten unique values of the city of the licenses filed between October and December 2019. As DCA does not clean idiosyncratic inputs by licensees, the geographical units are not uniform across the records.
 ```{r}
+library("RSocrata")
+temp = read.socrata(
+  "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2019-10-01' and '2019-12-01'"
+  )
+unique(temp$city)[0:10]
+```
+
+Given this limitation, we cannot track down where the businesses are exactly located in the city. However, we can still narrow our analysis to those that were filed from addresses in NYC. Setting this filter on the data can help us focus on the entrepreneurism of the city's residents. With the help of the zip-code-to-borough mapping by [Baruch College](https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies), we picked the records that match the list of zip codes corresponding to the five boroughs in NYC (Manhattan, Bronx, Queens, Brooklyn and Stetan Island). 
+
+Moreover, contact information which is not needed in this analysis was removed for privacy as well as to keep the data size small.
+
+```{r}
+library(RSocrata) 
+library(readxl)
+library(tidyverse)
+license = read.socrata(
+    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state = 'NY'")
+
 business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2020-01-01' and '2021-05-01' and address_state='NY' and license_status='Active'")
-str(business)
+
+# License data
+# Match zipcode to borough
+url <- "http://faculty.baruch.cuny.edu/geoportal/resources/nyc_geog/zip_to_zcta10_nyc_revised.xls"
+download.file(url, "zip_to_zcta10_nyc_revised.xls")
+zip_to_zcta <-  readxl::read_excel("zip_to_zcta10_nyc_revised.xls", sheet = "zip_to_zcta")
+
+ny_license <- inner_join(x = license, y = zip_to_zcta[,1:5], by=c("zip"="zipcode"))
+
+# Create a string factor that's easier for readers
+ny_license <- ny_license %>% mutate(borough = as.factor(bcode))
+levels(ny_license$borough) <- c("Bronx", "Brooklyn", "Manhattan", "Queens", "Stetan_Island")
+
+# Drop columns that are not needed.
+drops <- c("business_name","contact_phone")
+ny_license <- ny_license[ , !(names(ny_license) %in% drops)]
 ```
 
 

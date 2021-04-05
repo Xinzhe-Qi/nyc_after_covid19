@@ -1,10 +1,17 @@
 # Results
 
 
-## Seasonal Plot of license applications
 ```{r}
 library(tidyverse)
-month_year_lic = license %>% 
+ny_license %>% filter(status == "Issued") %>%  group_by(borough) %>% summarise(count=n()) %>% 
+    ggplot(aes(x = reorder(borough, -count), y = count)) + 
+    geom_bar(stat = 'identity') +
+    labs(title = "Approved license applications by boroughs")
+```
+
+## Seasonal Plot of license applications
+```{r}
+month_year_lic = ny_license %>% 
   mutate(start_month=format(start_date, "%m"), 
          start_year=format(start_date, "%Y")) %>% 
   group_by(start_year, start_month) %>% 

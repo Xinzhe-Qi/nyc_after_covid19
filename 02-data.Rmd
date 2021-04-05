@@ -3,19 +3,27 @@
 
 ## NYC OpenData
 
+**Context** 
+
 NYC OpenData is a data portal maintained by New York City. With a common set of standards and guidelines across the city's numerous agencies, NYC OpenData offers thousands of high-quality data for public use. For our project, we look at the following two datasets on business licenses and applications from the NYC Department of Consumer Affairs (DCA). The business license application data will give us information on business formation in NYC.
 
+The DCA collects applications for a license from businesses or individuals. The licensees are required to display this document and license number. The dataset contains detailed information such as the business location and applicant's information such as application ID and related contact information. These data can be used to identify businesses and individuals in industries requiring a DCA-issued license. Each row in the dataset represents each record of the DCA-issued license and its current status.
+
 - [Legally operating businesses in NYC](https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh) (weekly data by zipcode & census tract from the municipal government)
-    - Data description from OpenData: This data set features businesses/individuals holding a DCA license so that they may legally operate in New York City. Sightseeing guides and temporary street fair vendors are not included.
+    - Description: The data feature businesses/individuals holding a DCA license to legally operate in New York City. Sightseeing guides and temporary street fair vendors are not included.
     - Number of variables included: 29
 
 - [Applications for new business licenses in NYC](https://data.cityofnewyork.us/Business/License-Applications/ptev-4hud) (weekly data by zipcode)
-    - Data description from OpenData: This data set features license applications received during the last and current calendar years, including applications where a license was issued, denied, withdrawn, or remains pending. This data set is updated on a weekly basis.
+    - Description: The data features license applications received during the past few years, including applications where a license was issued, denied, withdrawn, or remains pending. This data set is updated on a weekly basis.
     - Number of variables included: 25
 
-We can get this data using the official NYC OpenDAta API which is powered by a third-party tool called [Socrata](https://dev.socrata.com/). 
+**Acquisition** 
 
+We can get this data using the official NYC OpenData API which is powered by a third-party tool called [Socrata](https://dev.socrata.com/). Socrata offers a robust query language to pre-process data on the server side.
 
+**Limitation**
+
+Companies and individuals can file for licenses from an address that is not in any of the five boroughs. The exact location of the business within NYC cannot be exactly confirmed. DCA only publishes the city, state, and postal Code of the mailing address for individual licenses. 
 
 ## The US Census Bureau's American Community Survey
 
