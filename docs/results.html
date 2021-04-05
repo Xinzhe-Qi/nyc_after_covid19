@@ -24,7 +24,7 @@
 <meta name="author" content="Kenny Lee, Xinzhe Qi" />
 
 
-<meta name="date" content="2021-04-04" />
+<meta name="date" content="2021-04-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -71,7 +71,11 @@
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a><ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#nyc-opendata"><i class="fa fa-check"></i><b>2.1</b> NYC OpenData</a></li>
+<li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#the-us-census-bureaus-american-community-survey"><i class="fa fa-check"></i><b>2.2</b> The US Census Bureau’s American Community Survey</a></li>
+<li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#nyc-geographies"><i class="fa fa-check"></i><b>2.3</b> NYC Geographies</a></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a></li>
 </ul></li>
@@ -100,22 +104,12 @@
             <section class="normal" id="section-">
 <div id="results" class="section level1">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
-<pre><code>## # A tibble: 52 x 3
-## # Groups:   start_year [5]
-##    start_year start_month count
-##    &lt;chr&gt;      &lt;chr&gt;       &lt;int&gt;
-##  1 2017       01            622
-##  2 2017       02            767
-##  3 2017       03           1309
-##  4 2017       04            704
-##  5 2017       05            635
-##  6 2017       06            541
-##  7 2017       07            993
-##  8 2017       08            712
-##  9 2017       09            603
-## 10 2017       10            502
-## # … with 42 more rows</code></pre>
+<p>Seasonality of new business license applications.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>New application vs. renewal.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 
 </div>
             </section>

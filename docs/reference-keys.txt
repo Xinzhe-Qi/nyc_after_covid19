@@ -1,5 +1,8 @@
 introduction
 data-sources
+nyc-opendata
+the-us-census-bureaus-american-community-survey
+nyc-geographies
 data-transformation
 read-data
 missing-values

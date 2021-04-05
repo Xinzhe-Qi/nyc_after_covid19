@@ -1,7 +1,26 @@
 # Data sources
 
-We use NYC’s weekly data on regional operating business licenses to compare trends immediately before the pandemic (Jan-Feb 2020), the peak of the pandemic (Apr-Mar 2020) and a period of recovery (Jan-Feb 2021). To enrich our analysis, we draw Census Bureau’s ACS data to incorporate other demographic and economic data. These values can be control variables when we compare the changes in trends and demographic across the neighborhoods in NYC.
 
-- [Legally operating businesses in NYC](https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh) (weekly data by zipcode & census tract from the municipal government)  
+## NYC OpenData
+
+NYC OpenData is a data portal maintained by New York City. With a common set of standards and guidelines across the city's numerous agencies, NYC OpenData offers thousands of high-quality data for public use. For our project, we look at the following two datasets on business licenses and applications from the NYC Department of Consumer Affairs (DCA). The business license application data will give us information on business formation in NYC.
+
+- [Legally operating businesses in NYC](https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh) (weekly data by zipcode & census tract from the municipal government)
+    - Data description from OpenData: This data set features businesses/individuals holding a DCA license so that they may legally operate in New York City. Sightseeing guides and temporary street fair vendors are not included.
+    - Number of variables included: 29
+
 - [Applications for new business licenses in NYC](https://data.cityofnewyork.us/Business/License-Applications/ptev-4hud) (weekly data by zipcode)
+    - Data description from OpenData: This data set features license applications received during the last and current calendar years, including applications where a license was issued, denied, withdrawn, or remains pending. This data set is updated on a weekly basis.
+    - Number of variables included: 25
+
+We can get this data using the official NYC OpenDAta API which is powered by a third-party tool called [Socrata](https://dev.socrata.com/). 
+
+
+
+## The US Census Bureau's American Community Survey
+
 - Census Bureau’s [ACS data](https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/)
+
+## NYC Geographies
+
+[Newman Library](https://library.baruch.cuny.edu/) at Baruch College, a school within the City University of New York, offers extensive work on maps and geographical crosswalks between various geographical units within NYC. Here's the [source](https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies).

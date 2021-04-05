@@ -1,20 +1,39 @@
 # Results
 
+Seasonality of new business license applications.
+
 ```{r}
 library(tidyverse)
-month_year_lic = license %>% 
+month_year_lic <- license %>% 
   mutate(start_month=format(start_date, "%m"), 
          start_year=format(start_date, "%Y")) %>% 
   group_by(start_year, start_month) %>% 
   summarize(count=n())
-month_year_lic
-```
 
-```{r}
 ggplot(data = month_year_lic, 
             aes(x = start_month, y = count, 
                 group = start_year, colour = start_year)) + 
   geom_line()
 ```
 
+New application vs. renewal.
 
+``` {r}
+license %>% ggplot(aes(x=license_type, fill=application_or_renewal)) + geom_bar()
+```
+
+
+``` {r}
+business %>% group_by(industry) %>% 
+  summarize(count = n()) %>% 
+  mutate(industry = fct_reorder(industry, count, .desc = FALSE)) %>% 
+  ggplot(aes(y=industry, x=count)) + geom_bar(stat = "identity")
+
+```
+
+``` {r}
+business %>% 
+  ggplot(aes(x=license_type)) + 
+  geom_bar(stat = "count")
+
+```

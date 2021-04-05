@@ -24,7 +24,7 @@
 <meta name="author" content="Kenny Lee, Xinzhe Qi" />
 
 
-<meta name="date" content="2021-04-04" />
+<meta name="date" content="2021-04-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -71,7 +71,11 @@
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a><ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#nyc-opendata"><i class="fa fa-check"></i><b>2.1</b> NYC OpenData</a></li>
+<li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#the-us-census-bureaus-american-community-survey"><i class="fa fa-check"></i><b>2.2</b> The US Census Bureau’s American Community Survey</a></li>
+<li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#nyc-geographies"><i class="fa fa-check"></i><b>2.3</b> NYC Geographies</a></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a></li>
 </ul></li>
@@ -100,14 +104,34 @@
             <section class="normal" id="section-">
 <div id="data-sources" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
-<p>We use NYC’s weekly data on regional operating business licenses to compare trends immediately before the pandemic (Jan-Feb 2020), the peak of the pandemic (Apr-Mar 2020) and a period of recovery (Jan-Feb 2021). To enrich our analysis, we draw Census Bureau’s ACS data to incorporate other demographic and economic data. These values can be control variables when we compare the changes in trends and demographic across the neighborhoods in NYC.</p>
+<div id="nyc-opendata" class="section level2">
+<h2><span class="header-section-number">2.1</span> NYC OpenData</h2>
+<p>NYC OpenData is a data portal maintained by New York City. With a common set of standards and guidelines across the city’s numerous agencies, NYC OpenData offers thousands of high-quality data for public use. For our project, we look at the following two datasets on business licenses and applications from the NYC Department of Consumer Affairs (DCA). The business license application data will give us information on business formation in NYC.</p>
 <ul>
-<li><a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally operating businesses in NYC</a> (weekly data by zipcode &amp; census tract from the municipal government)<br />
-</li>
-<li><a href="https://data.cityofnewyork.us/Business/License-Applications/ptev-4hud">Applications for new business licenses in NYC</a> (weekly data by zipcode)</li>
+<li><a href="https://data.cityofnewyork.us/Business/Legally-Operating-Businesses/w7w3-xahh">Legally operating businesses in NYC</a> (weekly data by zipcode &amp; census tract from the municipal government)
+<ul>
+<li>Data description from OpenData: This data set features businesses/individuals holding a DCA license so that they may legally operate in New York City. Sightseeing guides and temporary street fair vendors are not included.</li>
+<li>Number of variables included: 29</li>
+</ul></li>
+<li><a href="https://data.cityofnewyork.us/Business/License-Applications/ptev-4hud">Applications for new business licenses in NYC</a> (weekly data by zipcode)
+<ul>
+<li>Data description from OpenData: This data set features license applications received during the last and current calendar years, including applications where a license was issued, denied, withdrawn, or remains pending. This data set is updated on a weekly basis.</li>
+<li>Number of variables included: 25</li>
+</ul></li>
+</ul>
+<p>We can get this data using the official NYC OpenDAta API which is powered by a third-party tool called <a href="https://dev.socrata.com/">Socrata</a>.</p>
+</div>
+<div id="the-us-census-bureaus-american-community-survey" class="section level2">
+<h2><span class="header-section-number">2.2</span> The US Census Bureau’s American Community Survey</h2>
+<ul>
 <li>Census Bureau’s <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/">ACS data</a></li>
 </ul>
+</div>
+<div id="nyc-geographies" class="section level2">
+<h2><span class="header-section-number">2.3</span> NYC Geographies</h2>
+<p><a href="https://library.baruch.cuny.edu/">Newman Library</a> at Baruch College, a school within the City University of New York, offers extensive work on maps and geographical crosswalks between various geographical units within NYC. Here’s the <a href="https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies">source</a>.</p>
 
+</div>
 </div>
             </section>
 
