@@ -24,7 +24,7 @@
 <meta name="author" content="Kenny Lee, Xinzhe Qi" />
 
 
-<meta name="date" content="2021-04-01" />
+<meta name="date" content="2021-04-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -72,7 +72,9 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -98,7 +100,115 @@
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<div id="read-data" class="section level2">
+<h2><span class="header-section-number">3.1</span> Read Data</h2>
+<pre><code>##    application_id license_number license_type application_or_renewal
+## 1  1164-2019-RDPD    1472251-DCA     Business                Renewal
+## 2 18870-2017-ALAU    2064599-DCA     Business            Application
+## 3  1107-2019-RELE    1379821-DCA     Business                Renewal
+## 4 26254-2017-RSWC    1251386-DCA     Business                Renewal
+## 5  3289-2019-AEHD    2083769-DCA     Business            Application
+## 6 20280-2017-ALAU    2064587-DCA     Business            Application
+##                        business_name status start_date   end_date
+## 1        AMERICAN EAST PHARMACY INC. Issued 2019-01-09 2019-01-10
+## 2       OLD BROADWAY LAUNDROMAT CORP Issued 2017-12-01 2018-01-09
+## 3 DYNAMIC CELLULAR 37TH STREET, INC. Issued 2019-01-08 2019-01-09
+## 4       L &amp; J BRAZIL RESTAURANT INC. Issued 2017-09-06 2017-09-07
+## 5                   ADEDOKUN, SAMSON Issued 2019-03-26 2019-03-28
+## 6                 JJB CLEANING CORP. Issued 2017-12-28 2018-01-09
+##                 license_category application_category building_number
+## 1             Dealer In Products                Basic              23
+## 2                      Laundries                Basic            3643
+## 3              Electronics Store                Basic             266
+## 4                  Sidewalk Cafe              Special              34
+## 5 Electronic &amp; Appliance Service                Basic             224
+## 6                      Laundries                Basic            3458
+##        street     city state   zip contact_phone  longitude   latitude
+## 1 DIVISION ST NEW YORK    NY 10002    2129251900 -73.996169 40.7141181
+## 2    BROADWAY NEW YORK    NY 10031    2128767600 -73.948218 40.8295063
+## 3   W 37TH ST NEW YORK    NY 10018    6463548577 -73.991009 40.7536313
+## 4   W 46TH ST NEW YORK    NY 10036    2126439271 -73.980266 40.7565448
+## 5  W 116TH ST NEW YORK    NY 10026    3479983161 -73.953758 40.8037302
+## 6    BROADWAY NEW YORK    NY 10031  212-283-2773  -73.95223 40.8239774
+##   unit_type unit description street_2 temp_op_letter_issued
+## 1      &lt;NA&gt; &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;                  &lt;NA&gt;
+## 2      &lt;NA&gt; &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;                  &lt;NA&gt;
+## 3      &lt;NA&gt; &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;                  &lt;NA&gt;
+## 4      &lt;NA&gt; &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;                  &lt;NA&gt;
+## 5      &lt;NA&gt; &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;                  &lt;NA&gt;
+## 6      &lt;NA&gt; &lt;NA&gt;        &lt;NA&gt;     &lt;NA&gt;                  &lt;NA&gt;
+##   temp_op_letter_expiration active_vehicles
+## 1                      &lt;NA&gt;            &lt;NA&gt;
+## 2                      &lt;NA&gt;            &lt;NA&gt;
+## 3                      &lt;NA&gt;            &lt;NA&gt;
+## 4                      &lt;NA&gt;            &lt;NA&gt;
+## 5                      &lt;NA&gt;            &lt;NA&gt;
+## 6                      &lt;NA&gt;            &lt;NA&gt;</code></pre>
+<pre><code>##   license_nbr license_type lic_expir_dd license_status license_creation_date
+## 1 2079082-DCA   Individual   2020-10-31         Active            2018-10-15
+## 2 1451895-DCA   Individual   2020-10-31         Active            2012-12-10
+## 3 1076688-DCA     Business   2021-01-31         Active            2001-04-06
+## 4 2007722-DCA   Individual   2020-09-30         Active            2014-05-08
+## 5 1388781-DCA     Business   2021-04-15         Active            2011-04-22
+## 6 1258976-DCA     Business   2021-04-01         Active            2007-06-18
+##                 industry                          business_name address_city
+## 1       Tow Truck Driver                        VICENCIO, RENZO    RIDGEWOOD
+## 2       Tow Truck Driver                  ARCHIN, LIONEL JUNIOR  W HEMPSTEAD
+## 3 Debt Collection Agency PROFESSIONAL RECOVERY ASSOCIATES, INC.    LEVITTOWN
+## 4         General Vendor                      WRIGHT, LUCIUS A.     BROOKLYN
+## 5          Sidewalk Cafe             EIGHTY THIRD AND FIRST LLC     NEW YORK
+## 6      Storage Warehouse      AUER&#39;S MOVING &amp; RIGGING CO., INC.        BRONX
+##   address_state address_zip contact_phone address_building address_street_name
+## 1            NY       11385    3474581213             &lt;NA&gt;                &lt;NA&gt;
+## 2            NY       11552    3476456298             &lt;NA&gt;                &lt;NA&gt;
+## 3            NY       11756  516-579-2230               64        DIVISION AVE
+## 4            NY       11217  757-214-7735             &lt;NA&gt;                &lt;NA&gt;
+## 5            NY       10028    2122076680             1593             1ST AVE
+## 6            NY       10454    2124277800              890          E 135TH ST
+##   address_borough
+## 1            &lt;NA&gt;
+## 2            &lt;NA&gt;
+## 3     Outside NYC
+## 4            &lt;NA&gt;
+## 5       Manhattan
+## 6           Bronx
+##                                                                   detail_2
+## 1                                                                     &lt;NA&gt;
+## 2                                                                     &lt;NA&gt;
+## 3                                                                     &lt;NA&gt;
+## 4                General Vendor Type: Citywide Specialized Vendor (Yellow)
+## 5 Sidewalk Cafe Type: Unenclosed, Square Feet: 632, Tables: 22, Chairs: 44
+## 6                                                                     &lt;NA&gt;
+##   business_name_2 detail community_board council_district     bin        bbl
+## 1            &lt;NA&gt;   &lt;NA&gt;            &lt;NA&gt;             &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;
+## 2            &lt;NA&gt;   &lt;NA&gt;            &lt;NA&gt;             &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;
+## 3            &lt;NA&gt;   &lt;NA&gt;            &lt;NA&gt;             &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;
+## 4            &lt;NA&gt;   &lt;NA&gt;            &lt;NA&gt;             &lt;NA&gt;    &lt;NA&gt;       &lt;NA&gt;
+## 5          FELICE      1             108                5 1049893 1015450030
+## 6            &lt;NA&gt;      2             201               17 2004029 2025940005
+##    nta census_tract          longitude          latitude location.latitude
+## 1 &lt;NA&gt;         &lt;NA&gt;               &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;
+## 2 &lt;NA&gt;         &lt;NA&gt;               &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;
+## 3 &lt;NA&gt;         &lt;NA&gt;               &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;
+## 4 &lt;NA&gt;         &lt;NA&gt;               &lt;NA&gt;              &lt;NA&gt;              &lt;NA&gt;
+## 5 MN32          138 -73.95094413250499 40.77474748777373 40.77474748777373
+## 6 BX39           19  -73.9098033063588 40.80078661916137 40.80078661916137
+##   location.longitude                              location.human_address
+## 1               &lt;NA&gt;                                                &lt;NA&gt;
+## 2               &lt;NA&gt;                                                &lt;NA&gt;
+## 3               &lt;NA&gt;                                                &lt;NA&gt;
+## 4               &lt;NA&gt;                                                &lt;NA&gt;
+## 5 -73.95094413250499 {&quot;address&quot;: &quot;&quot;, &quot;city&quot;: &quot;&quot;, &quot;state&quot;: &quot;&quot;, &quot;zip&quot;: &quot;&quot;}
+## 6  -73.9098033063588 {&quot;address&quot;: &quot;&quot;, &quot;city&quot;: &quot;&quot;, &quot;state&quot;: &quot;&quot;, &quot;zip&quot;: &quot;&quot;}
+##   address_street_name_2
+## 1                  &lt;NA&gt;
+## 2                  &lt;NA&gt;
+## 3                  &lt;NA&gt;
+## 4                  &lt;NA&gt;
+## 5                  &lt;NA&gt;
+## 6                  &lt;NA&gt;</code></pre>
 
+</div>
 </div>
             </section>
 
@@ -145,7 +255,7 @@ gitbook.start({
 "text": null
 },
 "view": {
-"link": "https://github.com/Ykennylee15/nyc_after_covid19/blob/main/03-cleaning.Rmd",
+"link": "https://github.com/kennylee15/nyc_after_covid19/blob/main/03-cleaning.Rmd",
 "text": null
 },
 "download": null,
