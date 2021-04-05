@@ -7,5 +7,7 @@ data-transformation
 read-data
 missing-values
 results
+seasonal-plot-of-license-applications
+seasonal-plot-of-operating-business
 interactive-component
 conclusion

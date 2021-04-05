@@ -1,10 +1,10 @@
 # Results
 
-Seasonality of new business license applications.
 
+## Seasonal Plot of license applications
 ```{r}
 library(tidyverse)
-month_year_lic <- license %>% 
+month_year_lic = license %>% 
   mutate(start_month=format(start_date, "%m"), 
          start_year=format(start_date, "%Y")) %>% 
   group_by(start_year, start_month) %>% 
@@ -12,9 +12,58 @@ month_year_lic <- license %>%
 
 ggplot(data = month_year_lic, 
             aes(x = start_month, y = count, 
-                group = start_year, colour = start_year)) + 
-  geom_line()
+                group = start_year, color = start_year)) + 
+  geom_line() +
+  labs(title = "Seasonal plot of license applications in each month",
+       subtitle = "From 2017 to 2021")
 ```
+
+## Seasonal Plot of operating business
+```{r}
+business = business %>% 
+  mutate(license_creation_date = as.Date(license_creation_date),
+         lic_expir_dd = as.Date(lic_expir_dd)) %>% 
+  filter(license_creation_date <= lic_expir_dd) %>% 
+  # some weird data here, creation should be earlier than expiration
+  drop_na(license_creation_date, lic_expir_dd)
+b_indi = business %>% filter(license_type=="Individual")
+#head(b_indi)
+b_busi = business %>% filter(license_type=="Business")
+#head(b_busi)
+```
+
+
+```{r}
+mon_seq <- function(start, end){
+  seq(start, end, by = "month")
+}
+countMonthActive = data.frame(format(do.call("c", mapply(mon_seq, 
+                                      b_indi$license_creation_date, 
+                                      b_indi$lic_expir_dd)), "%Y-%m") %>% table)
+colnames(countMonthActive) = c("Date", "Count")
+countMonthActive = countMonthActive %>% 
+  mutate(Date = as.character(Date)) %>% 
+  mutate(Date = paste0(Date, "-01")) %>% 
+  mutate(Date = as.Date(Date)) %>% 
+  filter(Date > as.Date('2017-01-01'))
+#head(countMonthActive)
+```
+
+```{r}
+month_year_busi = countMonthActive %>% 
+  mutate(month=format(Date, "%m"), 
+         year=format(Date, "%Y"))
+```
+
+```{r}
+ggplot(data = month_year_busi, 
+            aes(x = month, y = Count, 
+                group = year, color = year)) + 
+  geom_line() +
+  labs(title = "Seasonal plot of operating businesses in each month",
+       subtitle = "From 2017 to 2021")
+```
+
 
 New application vs. renewal.
 
