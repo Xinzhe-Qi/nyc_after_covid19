@@ -15,7 +15,7 @@ license = read.socrata(
 ```
 
 
-Note that the source data do not offer clean information where the business is actually located as licensees can register with any mailing or permanent address that need not be in NYC. The below shows the first ten unique values of the city of the licenses filed between October and December 2019. As DCA does not clean idiosyncratic inputs by licensees, the geographical units are not uniform across the records.
+Note that the source data do not offer clean information where the business is actually located as licensees can register with any mailing or permanent address that need not be in NYC. The below shows the first ten unique values of the city of the licenses filed between October and December 2019. As (NYC  Department of Consumer Affairs) DCA does not fix idiosyncratic inputs by licensees, the geographical units are not uniform across the records.
 ```{r}
 library("RSocrata")
 temp = read.socrata(
@@ -26,14 +26,14 @@ unique(temp$city)[0:10]
 
 Given this limitation, we cannot track down where the businesses are exactly located in the city. However, we can still narrow our analysis to those that were filed from addresses in NYC. Setting this filter on the data can help us focus on the entrepreneurism of the city's residents. With the help of the zip-code-to-borough mapping by [Baruch College](https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies), we picked the records that match the list of zip codes corresponding to the five boroughs in NYC (Manhattan, Bronx, Queens, Brooklyn and Stetan Island). 
 
-Moreover, contact information which is not needed in this analysis was removed for privacy as well as to keep the data size small.
+Moreover, various contact information which is not needed in this analysis was removed for privacy as well as to keep the data size small. In addition, we disregard a small sample of applications that are denied, withdrawn, or pending. The vast majority of these cases are due to errors made by the applicants while filling out the DCA form. At this stage, we do not drop any rows or columns with missing values.
 
 ```{r}
 library(RSocrata) 
 library(readxl)
 library(tidyverse)
 license = read.socrata(
-    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state = 'NY'")
+    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state = 'NY' and status='Issued'")
 
 business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2020-01-01' and '2021-05-01' and address_state='NY' and license_status='Active'")
 

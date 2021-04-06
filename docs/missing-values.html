@@ -24,7 +24,7 @@
 <meta name="author" content="Kenny Lee, Xinzhe Qi" />
 
 
-<meta name="date" content="2021-04-05" />
+<meta name="date" content="2021-04-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -173,7 +173,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="missing-values" class="section level1">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
+<p>Most missing values in our pre-processed business application dataset are concentrated in variables related to business address details such as building unit or office suite number. Within variables that we care about the most such as zip codes, application status, and broader geographical unit the applicant is located in, missing values are non-existent.</p>
+<p>The bar chart below features variable names with most missing values in a descending order from top to bottom. Other variables that are not shown here do not have any missing values. The information in variables with missing values fortunately carries little importance in our analysis. For all of the small number of observations where <code>city</code> (representing the neighborhood-level jurisdiction of an area where applicants are located in), zip code values are present that help us map to a broader area for aggregation.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>In addition, we use the <code>extracat</code> package for analyzing the pattern in missing data.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> The main area in the chart below shows all combination of missing values across columns and rows. The gray horizontal columns in the right-most area show the frequency of respective row-wise patterns. The magenta vertical bars in the bottom area show the frequency of column-wise patterns.</p>
+<p>This graphical analysis indicates that the most frequent missing pattern is the one where an applicant did not provide any input for the second street address (<code>street_2</code>), additional description of the location of the business (<code>description</code>), unit number (<code>unit</code>) and unit type (<code>unit_type</code>). The second most frequent pattern lacks additional information on geographical coordinates (<code>longitude</code> &amp; <code>latitude</code>) and street name (<code>street</code>). These patterns likely reflect the fact that individual applicants are free to set up a business anywhere in the city, regardless of the address used when filing.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>As this package is currently unavailable in CRAN, we used an archived package from Prof. Joyce Robbin’s <a href="https://github.com/jtr13/extracat">repository</a>.<a href="missing-values.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
