@@ -92,4 +92,9 @@ ny_business %>%
   ggplot(aes(x=license_type)) + 
   geom_bar(stat = "count")
 
+ny_business %>% 
+    ggplot(aes(x = address_city, y=..count.., fill=license_type)) + 
+    stat_count(geom="bar") +
+    labs(title = "Operating businesses by boroughs",
+         x = "Regions", y = "Counts")
 ```
