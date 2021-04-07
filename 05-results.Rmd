@@ -3,14 +3,18 @@
 
 ```{r}
 library(tidyverse)
-ny_license %>% filter(status == "Issued") %>%  group_by(borough) %>% summarise(count=n()) %>% 
+ny_license %>% 
+  filter(status == "Issued") %>%  
+  group_by(borough) %>% 
+  summarise(count=n()) %>% 
     ggplot(aes(x = reorder(borough, -count), y = count)) + 
     geom_bar(stat = 'identity') +
-    labs(title = "Approved license applications by boroughs")
+    labs(title = "Approved license applications by boroughs",
+         x = "Regions", y = "Counts")
 ```
 
 ## Seasonal Plot of license applications
-```{r}
+```{r message = FALSE}
 month_year_lic = ny_license %>% 
   mutate(start_month=format(start_date, "%m"), 
          start_year=format(start_date, "%Y")) %>% 
@@ -27,15 +31,15 @@ ggplot(data = month_year_lic,
 
 ## Seasonal Plot of operating business
 ```{r}
-business = business %>% 
+ny_business = ny_business %>% 
   mutate(license_creation_date = as.Date(license_creation_date),
          lic_expir_dd = as.Date(lic_expir_dd)) %>% 
-  filter(license_creation_date <= lic_expir_dd) %>% 
-  # some weird data here, creation should be earlier than expiration
+  filter(license_creation_date <= lic_expir_dd) %>% # some weird data here, creation should be earlier than expiration
   drop_na(license_creation_date, lic_expir_dd)
-b_indi = business %>% filter(license_type=="Individual")
+
+b_indi = ny_business %>% filter(license_type=="Individual")
 #head(b_indi)
-b_busi = business %>% filter(license_type=="Business")
+b_busi = ny_business %>% filter(license_type=="Business")
 #head(b_busi)
 ```
 
@@ -45,21 +49,17 @@ mon_seq <- function(start, end){
   seq(start, end, by = "month")
 }
 countMonthActive = data.frame(format(do.call("c", mapply(mon_seq, 
-                                      b_indi$license_creation_date, 
-                                      b_indi$lic_expir_dd)), "%Y-%m") %>% table)
+                                      ny_business$license_creation_date, 
+                                      ny_business$lic_expir_dd)), "%Y-%m") %>% table)
 colnames(countMonthActive) = c("Date", "Count")
-countMonthActive = countMonthActive %>% 
+month_year_busi = countMonthActive %>% 
   mutate(Date = as.character(Date)) %>% 
   mutate(Date = paste0(Date, "-01")) %>% 
   mutate(Date = as.Date(Date)) %>% 
-  filter(Date > as.Date('2017-01-01'))
-#head(countMonthActive)
-```
-
-```{r}
-month_year_busi = countMonthActive %>% 
+  filter(Date > as.Date('2017-01-01')) %>% 
   mutate(month=format(Date, "%m"), 
          year=format(Date, "%Y"))
+#head(countMonthActive)
 ```
 
 ```{r}
@@ -83,12 +83,12 @@ license %>% ggplot(aes(x=license_type, fill=application_or_renewal)) + geom_bar(
 business %>% group_by(industry) %>% 
   summarize(count = n()) %>% 
   mutate(industry = fct_reorder(industry, count, .desc = FALSE)) %>% 
-  ggplot(aes(y=industry, x=count)) + geom_bar(stat = "identity")
-
+  ggplot(aes(y=industry, x=count)) + 
+  geom_bar(stat = "identity")
 ```
 
 ``` {r}
-business %>% 
+ny_business %>% 
   ggplot(aes(x=license_type)) + 
   geom_bar(stat = "count")
 

@@ -28,26 +28,31 @@ Given this limitation, we cannot track down where the businesses are exactly loc
 
 Moreover, various contact information which is not needed in this analysis was removed for privacy as well as to keep the data size small. In addition, we disregard a small sample of applications that are denied, withdrawn, or pending. The vast majority of these cases are due to errors made by the applicants while filling out the DCA form. At this stage, we do not drop any rows or columns with missing values.
 
-```{r}
+```{r message=F}
 library(RSocrata) 
 library(readxl)
 library(tidyverse)
 license = read.socrata(
-    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state = 'NY' and status='Issued'")
+    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state='NY' and status='Issued'")
 
-business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2020-01-01' and '2021-05-01' and address_state='NY' and license_status='Active'")
+business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2017-01-01' and '2021-05-01' and address_state='NY'")
+
+nyc_buroughs = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Stetan_Island")
+
+# Business data
+ny_business = business %>% filter(address_city %in% nyc_buroughs)
 
 # License data
 # Match zipcode to borough
 url <- "http://faculty.baruch.cuny.edu/geoportal/resources/nyc_geog/zip_to_zcta10_nyc_revised.xls"
 download.file(url, "zip_to_zcta10_nyc_revised.xls")
-zip_to_zcta <-  readxl::read_excel("zip_to_zcta10_nyc_revised.xls", sheet = "zip_to_zcta")
+zip_to_zcta <- readxl::read_excel("zip_to_zcta10_nyc_revised.xls", sheet = "zip_to_zcta")
 
 ny_license <- inner_join(x = license, y = zip_to_zcta[,1:5], by=c("zip"="zipcode"))
 
 # Create a string factor that's easier for readers
 ny_license <- ny_license %>% mutate(borough = as.factor(bcode))
-levels(ny_license$borough) <- c("Bronx", "Brooklyn", "Manhattan", "Queens", "Stetan_Island")
+levels(ny_license$borough) <- nyc_buroughs
 
 # Drop columns that are not needed.
 drops <- c("business_name","contact_phone")
