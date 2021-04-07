@@ -24,7 +24,7 @@
 <meta name="author" content="Kenny Lee, Xinzhe Qi" />
 
 
-<meta name="date" content="2021-04-06" />
+<meta name="date" content="2021-04-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -182,7 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data-transformation.html#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;RSocrata&quot;</span>) <span class="co"># load the RSocrata package</span></span>
 <span id="cb1-2"><a href="data-transformation.html#cb1-2"></a>license =<span class="st"> </span><span class="kw">read.socrata</span>(</span>
 <span id="cb1-3"><a href="data-transformation.html#cb1-3"></a>  <span class="st">&quot;https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between &#39;2017-01-01&#39; and &#39;2021-05-01&#39; and state=&#39;NY&#39;&quot;</span>)</span></code></pre></div>
-<p>Note that the source data do not offer clean information where the business is actually located as licensees can register with any mailing or permanent address that need not be in NYC. The below shows the first ten unique values of the city of the licenses filed between October and December 2019. As (NYC Department of Consumer Affairs) DCA does not fix idiosyncratic inputs by licensees, the geographical units are not uniform across the records.</p>
+<p>Note that the source data do not offer clean information where the business is actually located as licensees can register with any mailing or permanent address that need not be in NYC. The below shows the first ten unique values of the city of the licenses filed between October and December 2019. As NYC Department of Consumer Affairs (DCA) does not fix idiosyncratic inputs by licensees, the geographical units are not uniform across the records.</p>
 <pre><code>##  [1] &quot;MOUNT VERNON&quot;   &quot;NEW WINDSOR&quot;    &quot;BROOKLYN&quot;       &quot;CHICAGO&quot;       
 ##  [5] &quot;JAMAICA&quot;        &quot;NEW YORK&quot;       &quot;MIDDLE VILLAGE&quot; &quot;BRONX&quot;         
 ##  [9] &quot;SAINT ALBANS&quot;   &quot;HEMPSTEAD&quot;</code></pre>
