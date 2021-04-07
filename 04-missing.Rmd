@@ -38,4 +38,4 @@ ny_license %>% filter(status == "Issued") %>%
 
 ```
 
-[^1]: As this package is currently unavailable in CRAN, we used an archived package from Prof. Joyce Robbin's [repository](https://github.com/jtr13/extracat).
+[^1]: As this package is currently unavailable in CRAN, we used an archived package from Prof. Joyce Robbins' [repository](https://github.com/jtr13/extracat).
