@@ -2,7 +2,7 @@
 
 ## Searching for trends
 
-The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Stefan Island saw substantial increases in newly approved licenses.
+The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Staten Island saw substantial increases in newly approved licenses.
 
 ```{r}
 library(lubridate)
