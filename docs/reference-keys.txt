@@ -8,7 +8,7 @@ read-data
 processing-business-license-data-from-nyc-opendata
 missing-values
 results
-seasonal-plot-of-license-applications
-seasonal-plot-of-operating-business
+histoircal-trends-over-past-years
+identifying-seasonality-in-data
 interactive-component
 conclusion

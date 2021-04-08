@@ -1,5 +1,18 @@
 # Results
 
+## Histoircal trends over past years
+
+```{r}
+library(lubridate)
+ny_license_monthly <- ny_license %>% mutate(months = floor_date(start_date, "month")) %>% 
+    group_by(borough, months) %>% 
+    summarize(count=n())
+ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
+    geom_line() +
+    labs(title = "Number of new license approved by NYC boroughs",
+         x = "Years", y = "Count")
+
+```
 
 ```{r}
 library(tidyverse)
@@ -13,7 +26,9 @@ ny_license %>%
          x = "Regions", y = "Counts")
 ```
 
-## Seasonal Plot of license applications
+## Identifying seasonality in data
+
+Plot of license applications
 ```{r message = FALSE}
 month_year_lic = ny_license %>% 
   mutate(start_month=format(start_date, "%m"), 
@@ -29,7 +44,7 @@ ggplot(data = month_year_lic,
        subtitle = "From 2017 to 2021")
 ```
 
-## Seasonal Plot of operating business
+Plot of operating business
 ```{r}
 ny_business = ny_business %>% 
   mutate(license_creation_date = as.Date(license_creation_date),

@@ -32,10 +32,11 @@ Moreover, various contact information which is not needed in this analysis was r
 library(RSocrata) 
 library(readxl)
 library(tidyverse)
+# Consider data through March only to get complete data through the end of the month
 license = read.socrata(
-    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state='NY' and status='Issued'")
+    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-03-31' and state='NY' and status='Issued'")
 
-business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2017-01-01' and '2021-05-01' and address_state='NY'")
+business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2017-01-01' and '2021-03-31' and address_state='NY'")
 
 nyc_buroughs = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Stetan_Island")
 
