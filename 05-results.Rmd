@@ -1,16 +1,25 @@
 # Results
 
-## Histoircal trends over past years
+## Historical trends over past years
+
+The line chart over below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around end-March in 2020. The troughs of this sharp drop was in April 2020 during the first lockdowns in spring. Afterwards, the volume of new licenses have improved steadily in the Bronx, Brooklyn, Manhattan and Queens. The volume in Stetan Island, however, did not show much improvement. Over the winter, NYC including Stetan Island saw substantial increases in newly approved licenses. 
 
 ```{r}
 library(lubridate)
-ny_license_monthly <- ny_license %>% mutate(months = floor_date(start_date, "month")) %>% 
+ny_license_monthly <- ny_license %>% mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
     group_by(borough, months) %>% 
     summarize(count=n())
+
 ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
-    geom_line() +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.minor = element_blank()) +
+    geom_rect(xmin=as.Date("2020-03-01"), xmax=as.Date("2021-06-01"), 
+            ymin=-Inf, ymax=Inf, fill="#F5F5F5", alpha=0.05, col = "#F5F5F5") +
+    geom_line(size = 0.6 ) +
     labs(title = "Number of new license approved by NYC boroughs",
-         x = "Years", y = "Count")
+         x = "Years", y = "Count", color = "Borough") +
+    scale_x_date(date_labels = "%Y")
 
 ```
 
