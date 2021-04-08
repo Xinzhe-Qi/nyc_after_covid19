@@ -1,8 +1,8 @@
 # Results
 
-## Historical trends over past years
+## Searching for trends
 
-The line chart over below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around end-March in 2020. The troughs of this sharp drop was in April 2020 during the first lockdowns in spring. Afterwards, the volume of new licenses have improved steadily in the Bronx, Brooklyn, Manhattan and Queens. The volume in Stetan Island, however, did not show much improvement. Over the winter, NYC including Stetan Island saw substantial increases in newly approved licenses. 
+The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Stefan Island saw substantial increases in newly approved licenses.
 
 ```{r}
 library(lubridate)
@@ -17,11 +17,44 @@ ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
     geom_rect(xmin=as.Date("2020-03-01"), xmax=as.Date("2021-06-01"), 
             ymin=-Inf, ymax=Inf, fill="#F5F5F5", alpha=0.05, col = "#F5F5F5") +
     geom_line(size = 0.6 ) +
-    labs(title = "Number of new license approved by NYC boroughs",
+    labs(title = "Approved license applications by NYC boroughs",
          x = "Years", y = "Count", color = "Borough") +
-    scale_x_date(date_labels = "%Y")
-
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year")
 ```
+
+### New application vs. renewal
+
+In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests there must be a factor driving this cyclical behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city [authorities]("https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page"), home improvement contractors must renew their licenses every two years.
+
+``` {r}
+# ny_license %>% ggplot(aes(x=license_type, fill=application_or_renewal)) + geom_bar()
+```
+
+Excluding renewal applications, the damage of the pandemic on the local economy appears more starkly (see chart below). Applications for new business licenses dropped sharply and the recovery so far appears weak. Starting a new business takes a lot of resources and risk. Uncertain business outlook due to the ongoing pandemic probably discouraged many potential new businesses from entering the market. 
+
+Moreover, the chart highlights the uneven recovery among the five boroughs. While Queens, Brooklyn, and Manhattan showed improvement over last summer and winter, the recovery in the Bronx and Staten Island lags other boroughs.
+
+Note that the spike in authorized applications for new licenses close to the end of 2017 was due to a [change in city regulation](https://www1.nyc.gov/office-of-the-mayor/news/740-17/mayor-changes-laundry-license-application-requirements) governing licenses for laundry businesses, rather than a meaningful jump in demand for this business.
+
+``` {r}
+# Alternative
+ny_license_monthly <- ny_license %>% filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    group_by(borough, months) %>% 
+    summarize(count=n())
+
+ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.minor = element_blank()) +
+    geom_rect(xmin=as.Date("2020-03-01"), xmax=as.Date("2021-06-01"), 
+            ymin=-Inf, ymax=Inf, fill="#F5F5F5", alpha=0.05, col = "#F5F5F5") +
+    geom_line(size = 0.6 ) +
+    labs(title = "Approved license applications by NYC boroughs, excluding renewals",
+         x = "Years", y = "Count", color = "Borough") +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year")
+```
+
 
 ```{r}
 library(tidyverse)
@@ -35,11 +68,12 @@ ny_license %>%
          x = "Regions", y = "Counts")
 ```
 
-## Identifying seasonality in data
+### Seasonality in data
 
 Plot of license applications
 ```{r message = FALSE}
 month_year_lic = ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
   mutate(start_month=format(start_date, "%m"), 
          start_year=format(start_date, "%Y")) %>% 
   group_by(start_year, start_month) %>% 
@@ -95,12 +129,6 @@ ggplot(data = month_year_busi,
        subtitle = "From 2017 to 2021")
 ```
 
-
-New application vs. renewal.
-
-``` {r}
-license %>% ggplot(aes(x=license_type, fill=application_or_renewal)) + geom_bar()
-```
 
 
 ``` {r}
