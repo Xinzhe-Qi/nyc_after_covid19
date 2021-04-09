@@ -24,7 +24,7 @@
 <meta name="author" content="Kenny Lee, Xinzhe Qi" />
 
 
-<meta name="date" content="2021-04-08" />
+<meta name="date" content="2021-04-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -177,25 +177,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
 <div id="searching-for-trends" class="section level2">
 <h2><span class="header-section-number">5.1</span> Searching for trends</h2>
-<p>The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Stefan Island saw substantial increases in newly approved licenses.</p>
+<p>The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Staten Island saw substantial increases in newly approved licenses.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <div id="new-application-vs.-renewal" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> New application vs. renewal</h3>
-<p>In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests there must be a factor driving this cyclical behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city <a href="%22https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page%22">authorities</a>, home improvement contractors must renew their licenses every two years.</p>
-<p>Excluding renewal applications, the damage of the pandemic on the local economy appears more starkly (see chart below). Applications for new business licenses dropped sharply and the recovery so far appears weak. Starting a new business takes a lot of resources and risk. Uncertain business outlook due to the ongoing pandemic probably discouraged many potential new businesses from entering the market.</p>
+<p>In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests a cyclical factor driving this behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city <a href="%22https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page%22">regulation</a>, home improvement contractors must renew their licenses every two years.</p>
+<p>Excluding renewal applications, the damage of the pandemic on the local economy appears more starkly (see chart below). Applications for new business licenses dropped sharply and the recovery so far appears weak. Starting a new business takes a lot of resources and risk. Uncertain business outlook due to the ongoing pandemic probably discouraged many potential new businesses from entering the market. The shaded region in the chart denotes the period since the beginning of the pandemic in March 2020.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
 <p>Moreover, the chart highlights the uneven recovery among the five boroughs. While Queens, Brooklyn, and Manhattan showed improvement over last summer and winter, the recovery in the Bronx and Staten Island lags other boroughs.</p>
 <p>Note that the spike in authorized applications for new licenses close to the end of 2017 was due to a <a href="https://www1.nyc.gov/office-of-the-mayor/news/740-17/mayor-changes-laundry-license-application-requirements">change in city regulation</a> governing licenses for laundry businesses, rather than a meaningful jump in demand for this business.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>It is also noteworthy that large shares of applications for new licenses originate from outer-boroughs, which contradict a common perception that Manhattan is the business district of the city. The bar chart below shows that Brooklyn and Queens led approved applications for new licenses since 2016. Here, bars corresponding to boroughs are arranged in a descending order.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 <div id="seasonality-in-data" class="section level3">
 <h3><span class="header-section-number">5.1.2</span> Seasonality in data</h3>
+<p>Time series of business data often display seasonality. As the pandemic brought a shift in trend in our data, we subset the data between 2016 and 2019 and plot the subseries by month to visually identify a seasonal pattern.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Plot of license applications
-<img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>Plot of operating business</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-20-2.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-21-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-21-2.png" width="672" /></p>
 
 </div>
 </div>

@@ -5,7 +5,11 @@
 The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Staten Island saw substantial increases in newly approved licenses.
 
 ```{r}
+library(RColorBrewer)
 library(lubridate)
+
+boroughpal = brewer.pal(5, "Set1")
+
 ny_license_monthly <- ny_license %>% mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
     group_by(borough, months) %>% 
     summarize(count=n())
@@ -19,22 +23,20 @@ ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
     geom_line(size = 0.6 ) +
     labs(title = "Approved license applications by NYC boroughs",
          x = "Years", y = "Count", color = "Borough") +
-    scale_x_date(date_labels = "%Y", date_breaks = "1 year")
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year") + 
+    scale_color_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" ))
 ```
 
 ### New application vs. renewal
 
-In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests there must be a factor driving this cyclical behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city [authorities]("https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page"), home improvement contractors must renew their licenses every two years.
+In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests a cyclical factor driving this behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city [regulation]("https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page"), home improvement contractors must renew their licenses every two years.
 
 ``` {r}
 # ny_license %>% ggplot(aes(x=license_type, fill=application_or_renewal)) + geom_bar()
 ```
 
-Excluding renewal applications, the damage of the pandemic on the local economy appears more starkly (see chart below). Applications for new business licenses dropped sharply and the recovery so far appears weak. Starting a new business takes a lot of resources and risk. Uncertain business outlook due to the ongoing pandemic probably discouraged many potential new businesses from entering the market. 
-
-Moreover, the chart highlights the uneven recovery among the five boroughs. While Queens, Brooklyn, and Manhattan showed improvement over last summer and winter, the recovery in the Bronx and Staten Island lags other boroughs.
-
-Note that the spike in authorized applications for new licenses close to the end of 2017 was due to a [change in city regulation](https://www1.nyc.gov/office-of-the-mayor/news/740-17/mayor-changes-laundry-license-application-requirements) governing licenses for laundry businesses, rather than a meaningful jump in demand for this business.
+Excluding renewal applications, the damage of the pandemic on the local economy appears more starkly (see chart below). Applications for new business licenses dropped sharply and the recovery so far appears weak. Starting a new business takes a lot of resources and risk. Uncertain business outlook due to the ongoing pandemic probably discouraged many potential new businesses from entering the market. The shaded region in the chart denotes the period since the beginning of the pandemic in March 2020.
 
 ``` {r}
 # Alternative
@@ -52,23 +54,47 @@ ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
     geom_line(size = 0.6 ) +
     labs(title = "Approved license applications by NYC boroughs, excluding renewals",
          x = "Years", y = "Count", color = "Borough") +
-    scale_x_date(date_labels = "%Y", date_breaks = "1 year")
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year") + 
+    scale_color_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" ))
 ```
 
+Moreover, the chart highlights the uneven recovery among the five boroughs. While Queens, Brooklyn, and Manhattan showed improvement over last summer and winter, the recovery in the Bronx and Staten Island lags other boroughs.
+
+Note that the spike in authorized applications for new licenses close to the end of 2017 was due to a [change in city regulation](https://www1.nyc.gov/office-of-the-mayor/news/740-17/mayor-changes-laundry-license-application-requirements) governing licenses for laundry businesses, rather than a meaningful jump in demand for this business.
+
+It is also noteworthy that large shares of applications for new licenses originate from outer-boroughs, which contradict a common perception that Manhattan is the business district of the city. The bar chart below shows that Brooklyn and Queens led approved applications for new licenses since 2016. Here, bars corresponding to boroughs are arranged in a descending order.
 
 ```{r}
 library(tidyverse)
 ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
   filter(status == "Issued") %>%  
   group_by(borough) %>% 
   summarise(count=n()) %>% 
-    ggplot(aes(x = reorder(borough, -count), y = count)) + 
+    ggplot(aes(x = reorder(borough, -count), y = count, fill = reorder(borough, count))) +
+    # ggplot(aes(x = borough, y = count)) + 
     geom_bar(stat = 'identity') +
-    labs(title = "Approved license applications by boroughs",
-         x = "Regions", y = "Counts")
+    scale_fill_brewer(palette = "Blues") +
+    labs(title = "Approved applications for new licenses by boroughs since 2016",
+         x = "Boroughs", y = "Counts", fill = "Borough") +
+    guides(fill = guide_legend(reverse = TRUE))
+
 ```
 
 ### Seasonality in data
+
+Time series of business data often display seasonality. As the pandemic brought a shift in trend in our data, we subset the data between 2016 and 2019 and plot the subseries by month to visually identify a seasonal pattern.
+
+``` {r}
+library(xts)
+temp <-  ny_license %>% filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    group_by(months) %>% summarise(applications = n())
+ny_license_xts <- xts(temp$applications, temp$months)
+# Plot a sub-sample from 2016 to 2019
+monthplot(ny_license_xts["2016/2019"], ylab = "Count by month", labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+```
 
 Plot of license applications
 ```{r message = FALSE}
