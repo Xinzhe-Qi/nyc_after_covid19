@@ -84,19 +84,8 @@ ny_license %>%
 
 ### Seasonality in data
 
-Time series of business data often display seasonality. As the pandemic brought a shift in trend in our data, we subset the data between 2016 and 2019 and plot the subseries by month to visually identify a seasonal pattern.
+Time series of business data often display seasonality. We first show the time series of applications for new licenses in all of NYC by year in one chart. The lines for 2020 and 2021 are substantially below the lines for other years, reflecting the impact of the pandemic. The data for November 2017 through April 2018 were affected by one-off change in license regulation, as discussed above. Overall, the chart below indicates new business application tends to rise in spring and gradually slows over the summer and winter.
 
-``` {r}
-library(xts)
-temp <-  ny_license %>% filter(application_or_renewal == "Application") %>% 
-    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
-    group_by(months) %>% summarise(applications = n())
-ny_license_xts <- xts(temp$applications, temp$months)
-# Plot a sub-sample from 2016 to 2019
-monthplot(ny_license_xts["2016/2019"], ylab = "Count by month", labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
-```
-
-Plot of license applications
 ```{r message = FALSE}
 month_year_lic = ny_license %>% 
   filter(application_or_renewal == "Application") %>% 
@@ -112,6 +101,20 @@ ggplot(data = month_year_lic,
   labs(title = "Seasonal plot of license applications in each month",
        subtitle = "From 2017 to 2021")
 ```
+
+Afterwards, we aggregate these lines together by month to summarize seasonal behavior by month. Below, we show the behavior of the data by month using a subset of the data between 2016 and 2019 as the pandemic brought a shift in trend in our data in 2020. This chart shows a seasonal pattern more succinctly. However, as the data are aggregated across the cycle, the chart appears distorted by outliers corresponding to the period between November 2017 and April 2018.
+
+
+``` {r}
+library(xts)
+temp <-  ny_license %>% filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    group_by(months) %>% summarise(applications = n())
+ny_license_xts <- xts(temp$applications, temp$months)
+# Plot a sub-sample from 2016 to 2019
+monthplot(ny_license_xts["2016/2019"], ylab = "Count by month", labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+```
+
 
 Plot of operating business
 ```{r}
