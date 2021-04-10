@@ -103,7 +103,7 @@ ggplot(data = month_year_lic,
        subtitle = "From 2017 to 2021", y = "Count", x = "Months")
 ```
 
-Afterwards, we aggregate these lines together by month to summarize seasonal behavior by month. Below, we summarize the seasonal behavior of the data by month using a subset of the data between 2016 and 2019 as the pandemic brought a shift in trend in our data in 2020. This chart shows a seasonal pattern more succinctly, and shows that the median value, represented by the horizontal line in each box, is a good proxy for the seasonally-adjusted "true" trend of the data. High upper whiskers in April and November are due to distortions caused by policy changes in the period between November 2017 and April 2018.
+Afterwards, we aggregate these lines together by month to summarize seasonal behavior by month. Below, we summarize the seasonal behavior of the data by month using a subset of the data between 2016 and 2019 as the pandemic brought a shift in trend in our data in 2020. This chart shows a seasonal pattern more succinctly. The median value for each month, represented by the horizontal line in each box, is a good proxy for the seasonal pattern of the data. High upper whiskers in April and November are due to distortions caused by policy changes in the period between November 2017 and April 2018.
 
 ``` {r}
 temp <- ny_license %>% filter(application_or_renewal == "Application") %>% 
@@ -123,9 +123,61 @@ ny_license_xts <- xts(temp$applications, temp$months)
 monthplot(ny_license_xts["2016/2019"], ylab = "Count by month", labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
 ```
 
-``` {r}
+### Scaling the impact
 
+We calculate the "baseline" by borough by taking the median count of approved applications for new licenses by month between 2016 and 2019. For example, the sum of approved applications for new licenses by borough in March 2020 is compared to the median of the sums for March in respective years between 2016 and 2019. Using this methodology, we can estimate the impact of the pandemic while accounting for the seasonal distortions. The resulting metrics are scaled as percent change from the baseline.
+
+``` {r}
+# Calculate the baseline (pre-COVID)
+precovid_license <- ny_license %>% 
+    filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    filter(months < as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+    mutate(start_month=format(start_date, "%m"), 
+           start_year=format(start_date, "%Y")) %>% 
+    group_by(start_year, start_month, borough) %>% 
+    # Get a table of sums of application by year, month and borough
+    summarize(applications=n()) %>% 
+    # Take the median by borough and month across years
+    group_by(borough, start_month) %>% 
+    summarise(med = median(applications)) 
+
+# Post-COVID data
+postcovid_license <- ny_license %>% 
+    filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    filter(months >=  as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+    mutate(start_month=format(start_date, "%m"), 
+           start_year=format(start_date, "%Y")) %>% 
+    group_by(start_year, start_month, borough) %>% summarize(count=n())
+
+postcovid_license <- postcovid_license %>%
+    pivot_wider(id_cols = c(borough,start_month), names_from = start_year, values_from = count) %>% 
+    arrange(borough)
+colnames(postcovid_license)[3:4] <- c("y2020", "y2021")
+
+# Combine the two dataframes
+combined <- inner_join(precovid_license, postcovid_license, by=c("borough", "start_month"))
+combined <- combined %>% mutate(pc2020 = y2020/med*100-100, pc2021 = y2021/med*100-100)
+
+# The impact is calculated here and saved in a long data format
+impact <- combined %>% 
+    select(borough, start_month, pc2020, pc2021) %>%
+    pivot_longer(cols = starts_with("pc"), names_to = "year", values_to = "impact" ) %>%
+    arrange(borough, year) %>% 
+    mutate(months = as.Date(paste(gsub("pc", "", year), start_month, "01", sep="-" ), format="%Y-%m-%d") )
+
+impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>% 
+    ggplot(aes(x=months, y=impact, color=borough)) +
+    geom_line(size = 0.6 ) +
+    labs(title = "Impact of pandemic on the approved license applications by NYC boroughs",
+         x = "", y = "Change from baseline (%)", color = "Borough") +
+    scale_x_date(date_labels = "%b-%y", date_breaks = "3 month") +
+    scale_color_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" ))
 ```
+
+The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.
 
 Plot of operating business
 ```{r}
