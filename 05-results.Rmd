@@ -169,6 +169,9 @@ impact <- combined %>%
 
 impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>% 
     ggplot(aes(x=months, y=impact, color=borough)) +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.minor = element_blank()) +
     geom_line(size = 0.6 ) +
     labs(title = "Impact of pandemic on the approved license applications by NYC boroughs",
          x = "", y = "Change from baseline (%)", color = "Borough") +
