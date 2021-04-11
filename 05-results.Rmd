@@ -20,7 +20,7 @@ ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
     theme(panel.grid.minor = element_blank()) +
     geom_rect(xmin=as.Date("2020-03-01"), xmax=as.Date("2021-06-01"), 
             ymin=-Inf, ymax=Inf, fill="#F5F5F5", alpha=0.05, col = "#F5F5F5") +
-    geom_line(size = 0.6 ) +
+    geom_line(size = 0.7 ) +
     labs(title = "Approved license applications by NYC boroughs",
          x = "Years", y = "Count", color = "Borough") +
     scale_x_date(date_labels = "%Y", date_breaks = "1 year") + 
@@ -30,10 +30,25 @@ ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
 
 ### New application vs. renewal
 
-In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests a cyclical factor driving this behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city [regulation]("https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page"), home improvement contractors must renew their licenses every two years.
+In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests a cyclical factor driving this behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city [regulation]("https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page"), home improvement contractors must renew their licenses every two years. The license data indicate there are 60 industries that the city grants licenses to. The bar chart below shows top 10 industries that receive licenses from the city since 2016, as a percent share of the total number approved licenses (there are about 185 thousand records across 60 industries). Among those, home improvement is at the top, accounting for more than 15% of all licenses authorized. 
 
 ``` {r}
-# ny_license %>% ggplot(aes(x=license_type, fill=application_or_renewal)) + geom_bar()
+ny_license %>% 
+    filter(status == "Issued") %>%  
+    group_by(license_category) %>% 
+    summarize(count = n()) %>% 
+    mutate(industry = fct_reorder(license_category, count, .desc = FALSE)) %>% 
+    arrange(desc(count)) %>% 
+    mutate(pshare = (count / sum(count)) * 100) %>% 
+    slice(1:10) %>% 
+    ggplot(aes(y=industry, x=pshare)) + 
+    geom_bar(stat = "identity", fill = "#3182BD", color="black") +
+    scale_x_continuous(sec.axis = dup_axis(name = "")) +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.major.y = element_blank()) +
+    labs(title = "Top 10 approved business license categories since 2016",
+         x = "Percent of total (60 industries in total, about 185 thousand records)", y= "")
 ```
 
 Excluding renewal applications, the damage of the pandemic on the local economy appears more starkly (see chart below). Applications for new business licenses dropped sharply and the recovery so far appears weak. Starting a new business takes a lot of resources and risk. Uncertain business outlook due to the ongoing pandemic probably discouraged many potential new businesses from entering the market. The shaded region in the chart denotes the period since the beginning of the pandemic in March 2020.
@@ -51,7 +66,7 @@ ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
     theme(panel.grid.minor = element_blank()) +
     geom_rect(xmin=as.Date("2020-03-01"), xmax=as.Date("2021-06-01"), 
             ymin=-Inf, ymax=Inf, fill="#F5F5F5", alpha=0.05, col = "#F5F5F5") +
-    geom_line(size = 0.6 ) +
+    geom_line(size = 0.7 ) +
     labs(title = "Approved license applications by NYC boroughs, excluding renewals",
          x = "Years", y = "Count", color = "Borough") +
     scale_x_date(date_labels = "%Y", date_breaks = "1 year") + 
@@ -63,7 +78,7 @@ Moreover, the chart highlights the uneven recovery among the five boroughs. Whil
 
 Note that the spike in authorized applications for new licenses close to the end of 2017 was due to a [change in city regulation](https://www1.nyc.gov/office-of-the-mayor/news/740-17/mayor-changes-laundry-license-application-requirements) governing licenses for laundry businesses, rather than a meaningful jump in demand for this business.
 
-It is also noteworthy that large shares of applications for new licenses originate from outer-boroughs, which contradict a common perception that Manhattan is the business district of the city. The bar chart below shows that Brooklyn and Queens led approved applications for new licenses since 2016. Here, bars corresponding to boroughs are arranged in a descending order.
+It is also noteworthy that large shares of applications for new licenses originate from outer-boroughs, which contradict a common perception that Manhattan is the business district of the city. The bar chart below shows that Brooklyn and Queens led approved applications for new licenses since 2016. Here, bars corresponding to boroughs are arranged in descending order.
 
 ```{r}
 library(tidyverse)
@@ -74,18 +89,22 @@ ny_license %>%
   summarise(count=n()) %>% 
     ggplot(aes(x = reorder(borough, -count), y = count, fill = reorder(borough, count))) +
     # ggplot(aes(x = borough, y = count)) + 
-    geom_bar(stat = 'identity') +
+    geom_bar(stat = 'identity', color = "black") +
     theme_bw() +
-    scale_fill_brewer(palette = "Blues") +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.major.x = element_blank()) +
+    scale_y_continuous(sec.axis = dup_axis(name = "")) +
+    scale_fill_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" )) +
     labs(title = "Approved applications for new licenses by boroughs since 2016",
          x = "Boroughs", y = "Counts", fill = "Borough") +
-    guides(fill = guide_legend(reverse = TRUE))
+    guides(fill = guide_legend(reverse = FALSE))
 
 ```
 
 ### Seasonality in data
 
-Time series of business data often display seasonality. We first show the time series of applications for new licenses in all of NYC by year in one chart. The lines for 2020 and 2021 are substantially below the lines for other years, reflecting the impact of the pandemic. The data for November 2017 through April 2018 were affected by one-off change in license regulation, as discussed above. Overall, the chart below indicates new business application tends to rise in spring and gradually slows over the summer and winter.
+Time series of business data often display seasonality. We first show the time series of applications for new licenses in all of NYC by year in one chart. The lines for 2020 and 2021 are substantially below the lines for other years, reflecting the impact of the pandemic. The data for November 2017 through April 2018 were affected by a one-off change in license regulation, as discussed above. Overall, the chart below indicates new business application tends to rise in spring and gradually slows over the summer and winter.
 
 ```{r message = FALSE}
 month_year_lic = ny_license %>% 
@@ -103,14 +122,14 @@ ggplot(data = month_year_lic,
        subtitle = "From 2017 to 2021", y = "Count", x = "Months")
 ```
 
-Afterwards, we aggregate these lines together by month to summarize seasonal behavior by month. Below, we summarize the seasonal behavior of the data by month using a subset of the data between 2016 and 2019 as the pandemic brought a shift in trend in our data in 2020. This chart shows a seasonal pattern more succinctly. The median value for each month, represented by the horizontal line in each box, is a good proxy for the seasonal pattern of the data. High upper whiskers in April and November are due to distortions caused by policy changes in the period between November 2017 and April 2018.
+Afterward, we aggregate these lines together by month to summarize seasonal behavior by month. Below, we summarize the seasonal behavior of the data by month using a subset of the data between 2016 and 2019 as the pandemic brought a shift in trend in our data in 2020. This chart shows a seasonal pattern more succinctly. The median value for each month, represented by the horizontal line in each box, is a good proxy for the seasonal pattern of the data. High upper whiskers in April and November are due to distortions caused by policy changes in the period between November 2017 and April 2018.
 
 ``` {r}
 temp <- ny_license %>% filter(application_or_renewal == "Application") %>% 
     mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
     group_by(months) %>% summarise(applications = n()) %>% filter(months < as.Date("2020-01-01", format="%Y-%m-%d"))
 ny_license_ts <- ts(temp$applications, frequency = 12, start = c(2016,1), end = c(2019,12))
-boxplot(ny_license_ts ~ cycle(ny_license_ts), xlab = "Month", ylab = "Count", ann = TRUE)
+boxplot(ny_license_ts ~ cycle(ny_license_ts), xlab = "Month", ylab = "Count", ann = TRUE, col = "#3182BD")
 ```
 
 ``` {r, eval=FALSE}
@@ -123,9 +142,11 @@ ny_license_xts <- xts(temp$applications, temp$months)
 monthplot(ny_license_xts["2016/2019"], ylab = "Count by month", labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
 ```
 
-### Scaling the impact
+## Scaling the impact of the pandemic
 
-We calculate the "baseline" by borough by taking the median count of approved applications for new licenses by month between 2016 and 2019. For example, the sum of approved applications for new licenses by borough in March 2020 is compared to the median of the sums for March in respective years between 2016 and 2019. Using this methodology, we can estimate the impact of the pandemic while accounting for the seasonal distortions. The resulting metrics are scaled as percent change from the baseline.
+To measure the impact of the pandemic, we need a baseline, estimated during the period prior to the pandemic. We calculate monthly baseline levels by borough by taking the median count of approved applications for new licenses by month between 2016 and 2019. For example, the baseline level of approved business applications for Brooklyn in March is calculated as the median of the sums of approved applications for new licenses in Brooklyn respectively in March 2016, March 2017, March 2018, and March 2019. The impact of the pandemic is calculated as the percent difference from these monthly median values by borough. 
+
+By comparing the more recent data month by month to the baseline, we can estimate the impact of the pandemic while avoiding seasonal distortions. The resulting metrics are shown below.
 
 ``` {r}
 # Calculate the baseline (pre-COVID)
@@ -172,7 +193,7 @@ impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>%
     theme_bw() +
     theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
     theme(panel.grid.minor = element_blank()) +
-    geom_line(size = 0.6 ) +
+    geom_line(size = 0.7) +
     labs(title = "Impact of pandemic on the approved license applications by NYC boroughs",
          x = "", y = "Change from baseline (%)", color = "Borough") +
     scale_x_date(date_labels = "%b-%y", date_breaks = "3 month") +

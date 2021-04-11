@@ -11,6 +11,6 @@ results
 searching-for-trends
 new-application-vs.-renewal
 seasonality-in-data
-scaling-the-impact
+scaling-the-impact-of-the-pandemic
 interactive-component
 conclusion
