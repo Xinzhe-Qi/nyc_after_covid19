@@ -317,7 +317,7 @@ NYCdistricts@data$puma10 <- paste0("0",NYCdistricts@data$PUMA)
 ggNYCdistricts <- fortify(NYCdistricts, region = "puma10") 
 
 # join tabular data
-ggNYCdistricts<-left_join(ggNYCdistricts, latest_impact_puma_acs, by=c("id"="puma10"))
+ggNYCdistricts <- left_join(ggNYCdistricts, inner_join(diff_impact_puma, ny_acs_wide, by="puma10") , by=c("id"="puma10"))
 
 ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
     geom_polygon(aes(group = group, fill=diff, color = 'grey')) +
@@ -328,6 +328,13 @@ ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
          x = "Longitude", y = "Latitude", fill = "Percentage point", color = "" ) +
     scale_color_manual(values = 'Grey', labels = 'Missing value') +
     guides(color = guide_legend(override.aes = list(fill = 'grey')))
+
+# Output the file (don't run again)
+# temp <- select(ggNYCdistricts, long, lat, order, hole, piece, id, group, diff, Education, Poverty, Broadband, NAME)
+# topostring <- geojsonio::topojson_json(
+#     input = temp, lat = "lat", long = "long", geometry= "polygon" )
+# write(topostring, file = "NYC_topostring.json")
+
 ```
 
 In particular, neighborhoods that are relatively residential compared to others, usually farther out in the Bronx, Queens, and Brooklyn have shown stronger recoveries. The recovery in neighborhoods that are more commercial such as Financial District and Downtown Brooklyn is lagging, reflecting a shift in lifestyle since the pandemic. With a large share of office workers yet to return to offices, the recovery in these areas might take longer. Note that the neighborhood boundary lines mapped above follow the Census Bureau's Public Use Microdata Area (PUMA). While NYC neighborhoods generally correlate with PUMA, some multiple neighborhoods can be bucketed together into one larger PUMA. Check this [link](https://www1.nyc.gov/assets/planning/download/pdf/data-maps/nyc-population/census2010/puma_cd_map.pdf) for an official mapping between Community Districts and PUMA by NYC officials. 
