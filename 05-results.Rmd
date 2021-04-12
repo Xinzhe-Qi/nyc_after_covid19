@@ -131,7 +131,9 @@ temp <- ny_license %>% filter(application_or_renewal == "Application") %>%
   summarise(applications = n()) %>% 
   filter(months < as.Date("2020-01-01", format="%Y-%m-%d"))
 ny_license_ts <- ts(temp$applications, frequency = 12, start = c(2016,1), end = c(2019,12))
-boxplot(ny_license_ts ~ cycle(ny_license_ts), xlab = "Month", ylab = "Count", ann = TRUE, col = "#3182BD")
+
+boxplot(ny_license_ts ~ cycle(ny_license_ts), xlab = "Month", ylab = "Count", ann = TRUE, col = "#3182BD",
+        main = "Boxplot of the number of approved new licenses by month")
 ```
 
 ``` {r, eval=FALSE}
@@ -207,13 +209,13 @@ The chart above highlights a substantial drop in newly approved licenses during 
 
 ### Do demographic factors matter?
 
-We draw demographic information from the Census Bureau's latest 2019 American Community Survey (one-year estimates) corresponding to NYC's neighborhoods delineated by Community Districts. Three demographic variables we consider are
+We draw demographic information from the Census Bureau's latest 2019 American Community Survey (ACS) corresponding to NYC's neighborhoods delineated by Community Districts. These regions roughly correspond to areas commonly called "neighborhoods" in the city. We used these disaggregated data instead of borough level aggregates for a more robust analysis. Three demographic variables from the ACS we consider are
 
-- `Broadband`: percent of households in a region with a broadband internet access,
-- `Education`: percent of population aged 25+ with bachelors' degree or higher,
-- `Poverty`: percent of people living below the federally defined poverty threshold.
+- `Broadband`: Percent of households in a region with a broadband internet access,
+- `Education`: Percent of population aged 25+ with bachelors' degree or higher,
+- `Poverty`: Percent of people living below the federally defined poverty threshold.
 
-We examine the relationship between these variables and the impact of the pandemic on license applications for new businesses. The chart below shows scatterplots with lines representing best fits estimated with simple least square estimators.
+We examine the relationship between these variables and the impact of the pandemic on license applications for new businesses. The chart below shows scatterplots of these variables and the impact of the pandemic as of March 2021, with lines representing best fits estimated with simple least square estimators. 
 
 ``` {r}
 # Calculate the baseline (pre-COVID)
@@ -269,9 +271,17 @@ latest_impact_puma <- impact_puma %>% filter(months == as.Date("2021-03-01", for
 latest_impact_puma_acs <- left_join(ny_acs, latest_impact_puma, by = c("puma10"="puma10"))
 
 library(lattice)
+
+my.settings <- list(
+  par.main.text = list(font = 1, # make it bold
+                       just = "left", 
+                       x = grid::unit(5, "mm")))
+
 xyplot(impact ~ estimate | varlab, 
        data = latest_impact_puma_acs, type = c("p", "r"),
-       ylab = "Impact (%)", xlab = "Estimate")
+       # scales = list(tck = c(1,1), alternating=1),
+       ylab = "Impact (% change from baseline in Mar 2021)", xlab = "Estimate (% of the sample in a neighborhood)",
+       par.settings=my.settings, main = "Impact of the pandemic by estimates for key demographic variables")
 ```
 
 The best fit line with `Education` as an explanatory variable is a poor fit of the data. The first and third variables (`Broadband` and `Poverty`) seem to be more relevant to the dependent variable, but the relationship does not appear to be strong.
@@ -328,7 +338,7 @@ ggplot(busiCount, aes(y=industry, x=count)) +
   geom_bar(stat = "identity")
 ```
 
-``` {r}
+``` {r, eval = FALSE}
 ny_business %>% 
   ggplot(aes(x=license_type)) + 
   geom_bar(stat = "count")

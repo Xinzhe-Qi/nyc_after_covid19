@@ -210,13 +210,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.</p>
 <div id="do-demographic-factors-matter" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Do demographic factors matter?</h3>
-<p>We draw demographic information from the Census Bureau’s latest 2019 American Community Survey (one-year estimates) corresponding to NYC’s neighborhoods delineated by Community Districts. Three demographic variables we consider are</p>
+<p>We draw demographic information from the Census Bureau’s latest 2019 American Community Survey (ACS) corresponding to NYC’s neighborhoods delineated by Community Districts. These regions roughly correspond to areas commonly called “neighborhoods” in the city. We used these disaggregated data instead of borough level aggregates for a more robust analysis. Three demographic variables from the ACS we consider are</p>
 <ul>
-<li><code>Broadband</code>: percent of households in a region with a broadband internet access,</li>
-<li><code>Education</code>: percent of population aged 25+ with bachelors’ degree or higher,</li>
-<li><code>Poverty</code>: percent of people living below the federally defined poverty threshold.</li>
+<li><code>Broadband</code>: Percent of households in a region with a broadband internet access,</li>
+<li><code>Education</code>: Percent of population aged 25+ with bachelors’ degree or higher,</li>
+<li><code>Poverty</code>: Percent of people living below the federally defined poverty threshold.</li>
 </ul>
-<p>We examine the relationship between these variables and the impact of the pandemic on license applications for new businesses. The chart below shows scatterplots with lines representing best fits estimated with simple least square estimators.</p>
+<p>We examine the relationship between these variables and the impact of the pandemic on license applications for new businesses. The chart below shows scatterplots of these variables and the impact of the pandemic as of March 2021, with lines representing best fits estimated with simple least square estimators.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 <p>The best fit line with <code>Education</code> as an explanatory variable is a poor fit of the data. The first and third variables (<code>Broadband</code> and <code>Poverty</code>) seem to be more relevant to the dependent variable, but the relationship does not appear to be strong.</p>
 </div>
@@ -225,7 +225,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">5.3</span> Operating businesses in NYC</h2>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="672" /><img src="finalproj_files/figure-html/unnamed-chunk-26-2.png" width="672" /></p>
 
 </div>
 </div>
