@@ -13,7 +13,7 @@ searching-for-trends
 new-application-vs.-renewal
 seasonality-in-data
 scaling-the-impact-of-the-pandemic
-do-demographic-factors-matter
+do-demographic-factors-matter-in-recovery
 operating-businesses-in-nyc
 interactive-component
 conclusion

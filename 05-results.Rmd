@@ -207,15 +207,15 @@ impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>%
 
 The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.
 
-### Do demographic factors matter?
+## Do demographic factors matter in recovery?
 
-We draw demographic information from the Census Bureau's latest 2019 American Community Survey (ACS) corresponding to NYC's neighborhoods delineated by Community Districts. These regions roughly correspond to areas commonly called "neighborhoods" in the city. We used these disaggregated data instead of borough level aggregates for a more robust analysis. Three demographic variables from the ACS we consider are
+Against the backdrop of accelerating vaccine distribution, we hope to examine the relationship between demographic variables and recovery since the spring lockdown in 2020. We draw demographic information from the Census Bureau's latest 2019 American Community Survey (ACS) corresponding to NYC Community Districts, which roughly correspond to areas commonly known as "neighborhoods." We used these disaggregated data instead of borough level aggregates for a more robust analysis as there are 55 Community Districts in total. The three demographic variables from the ACS we consider are
 
 - `Broadband`: Percent of households in a region with a broadband internet access,
 - `Education`: Percent of population aged 25+ with bachelors' degree or higher,
 - `Poverty`: Percent of people living below the federally defined poverty threshold.
 
-We examine the relationship between these variables and the impact of the pandemic on license applications for new businesses. The chart below shows scatterplots of these variables and the impact of the pandemic as of March 2021, with lines representing best fits estimated with simple least square estimators. 
+To examine the relationship between these variables and the recovery in the volume of approved license applications for new businesses, we first constructed measures of the pandemic impact on applications for new business licenses for each of 55 neighborhoods following the same methodology that we used to calculate the measures for the five boroughs. To measure the "recovery" in each area, we take the difference between the average levels of the impact during April-June 2020 and January-March 2021. The chart below shows scatterplots of the demographic variables listed above and the recovery by neighborhood, with lines representing best fits estimated with simple least square estimators. 
 
 ``` {r}
 # Calculate the baseline (pre-COVID)
@@ -257,18 +257,26 @@ impact_puma <- combined_puma %>%
   arrange(puma10, year) %>% 
   mutate(months = as.Date(paste(gsub("pc", "", year), start_month, "01", sep="-" ), format="%Y-%m-%d") )
 
-# impact_puma %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>% 
-#   ggplot(aes(x=months, y=impact, color=puma10)) +
-#   theme_bw() +
-#   theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
-#   theme(panel.grid.minor = element_blank()) +
-#   geom_line(size = 0.7) +
-#   labs(title = "Impact of pandemic on the approved license applications by NYC puma10s",
-#        x = "", y = "Change from baseline (%)", color = "puma10") +
-#   scale_x_date(date_labels = "%b-%y", date_breaks = "3 month") 
+# latest_impact_puma <- impact_puma %>% filter(months == as.Date("2021-03-01", format = "%Y-%m-%d"))
+latest_impact_puma <- impact_puma %>% 
+    filter(year == "pc2021") %>% 
+    drop_na(impact) %>% 
+    group_by(puma10) %>% 
+    summarise(impact = mean(impact))
 
-latest_impact_puma <- impact_puma %>% filter(months == as.Date("2021-03-01", format = "%Y-%m-%d"))
-latest_impact_puma_acs <- left_join(ny_acs, latest_impact_puma, by = c("puma10"="puma10"))
+apr20_impact_puma <- impact_puma %>% 
+    filter(year == "pc2020",
+           months >= as.Date("2020-04-01", format = "%Y-%m-%d"),
+           months <= as.Date("2020-06-01", format = "%Y-%m-%d")) %>% 
+    drop_na(impact) %>% 
+    group_by(puma10) %>% 
+    summarise(impact = mean(impact))
+
+diff_impact_puma <- left_join(latest_impact_puma, apr20_impact_puma, by=c("puma10"="puma10"))
+diff_impact_puma <- diff_impact_puma %>% mutate(diff = impact.x - impact.y)
+latest_impact_puma_acs <- left_join(ny_acs, diff_impact_puma, by = c("puma10"="puma10"))
+
+# latest_impact_puma_acs <- left_join(ny_acs, latest_impact_puma, by = c("puma10"="puma10"))
 
 library(lattice)
 
@@ -277,14 +285,49 @@ my.settings <- list(
                        just = "left", 
                        x = grid::unit(5, "mm")))
 
-xyplot(impact ~ estimate | varlab, 
+xyplot(diff ~ estimate | varlab, 
        data = latest_impact_puma_acs, type = c("p", "r"),
        # scales = list(tck = c(1,1), alternating=1),
-       ylab = "Impact (% change from baseline in Mar 2021)", xlab = "Estimate (% of the sample in a neighborhood)",
-       par.settings=my.settings, main = "Impact of the pandemic by estimates for key demographic variables")
+       ylab = "Recovery (percentage point)", xlab = "Estimate (% of the sample in a neighborhood)",
+       par.settings=my.settings, main = "Recovery since spring 2020 by NYC neighborhood")
 ```
 
-The best fit line with `Education` as an explanatory variable is a poor fit of the data. The first and third variables (`Broadband` and `Poverty`) seem to be more relevant to the dependent variable, but the relationship does not appear to be strong.
+The chart above indicates that the best fit lines with `Education` and `Broadband` as explanatory variables and recovery since April-June 2020 are downward sloping. That is, the higher the percent share of the population with education level at or above bachelor's degree and the percent share of households with high-speed broadband access, the lower the recovery has been. With poverty as an explanatory variable, the best fit line is upward sloping, meaning that the higher the share of the population living under poverty, the stronger the recovery has been.
+
+This result may sound counter-intuitive to some. However, this result could be due to the fact that many NYC residents with more financial resources have exited the city during the extended period of lockdown since spring 2020.
+
+The following chart is a choropleth map of NYC with the fill color showing the degree of recovery since spring 2020. This chart shows that while neighborhoods outside Manhattan may have been initially hit more harshly by the pandemic, their recovery since spring 2020 has been more robust than neighborhoods in Manhattan.
+
+``` {r}
+library(rgdal)    # for readOGR and others
+library(sp) 
+library(jsonlite)
+library(maptools)
+library(mapproj)
+
+# Geo JSON
+# base_url <- "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Community_Districts/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=pgeojson"
+base_url <-"https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Public_Use_Microdata_Areas_PUMAs/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson"
+NYCdistricts <- readOGR(base_url, 'OGRGeoJSON', verbose = T)
+
+# Add preceding zero to puma codes
+NYCdistricts@data$puma10 <- paste0("0",NYCdistricts@data$PUMA)
+
+# Combine data
+ggNYCdistricts <- fortify(NYCdistricts, region = "puma10") 
+
+# join tabular data
+ggNYCdistricts<-left_join(ggNYCdistricts, latest_impact_puma_acs, by=c("id"="puma10"))
+
+ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
+    geom_polygon(aes(group = group, fill=diff, color = 'grey')) +
+    scale_fill_distiller(palette = "YlGnBu", direction=1, na.value = 'grey') +
+    theme_bw() +
+    labs(title = "Recovery since spring 2020 (difference in COVID impact between now and then)",
+         x = "Longitude", y = "Latitude", fill = "Percentage point", color = "" ) +
+    scale_color_manual(values = 'Grey', labels = 'Missing value') +
+    guides(color = guide_legend(override.aes = list(fill = 'grey')))
+```
 
 ## Operating businesses in NYC
 ```{r}
