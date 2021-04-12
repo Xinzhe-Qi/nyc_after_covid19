@@ -12,7 +12,7 @@ var svg = d3.select("#my_dataviz")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("busiCount.csv", function(data) {
+d3.csv("https://raw.githubusercontent.com/kennylee15/nyc_after_covid19/main/busiCount.csv", function(data) {
       
   // sort data
   data.sort(function(b, a) {
