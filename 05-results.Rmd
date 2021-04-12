@@ -127,7 +127,9 @@ Afterward, we aggregate these lines together by month to summarize seasonal beha
 ``` {r}
 temp <- ny_license %>% filter(application_or_renewal == "Application") %>% 
     mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
-    group_by(months) %>% summarise(applications = n()) %>% filter(months < as.Date("2020-01-01", format="%Y-%m-%d"))
+    group_by(months) %>% 
+  summarise(applications = n()) %>% 
+  filter(months < as.Date("2020-01-01", format="%Y-%m-%d"))
 ny_license_ts <- ts(temp$applications, frequency = 12, start = c(2016,1), end = c(2019,12))
 boxplot(ny_license_ts ~ cycle(ny_license_ts), xlab = "Month", ylab = "Count", ann = TRUE, col = "#3182BD")
 ```
@@ -203,7 +205,7 @@ impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>%
 
 The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.
 
-Plot of operating business
+## Operating businesses in NYC
 ```{r}
 ny_business = ny_business %>% 
   mutate(license_creation_date = as.Date(license_creation_date),
@@ -246,12 +248,12 @@ ggplot(data = month_year_busi,
 ```
 
 
-
 ``` {r}
-business %>% group_by(industry) %>% 
+busiCount = business %>% group_by(industry) %>% 
   summarize(count = n()) %>% 
-  mutate(industry = fct_reorder(industry, count, .desc = FALSE)) %>% 
-  ggplot(aes(y=industry, x=count)) + 
+  mutate(industry = fct_reorder(industry, count, .desc = FALSE))
+write.csv(busiCount, "busiCount.csv")
+ggplot(busiCount, aes(y=industry, x=count)) + 
   geom_bar(stat = "identity")
 ```
 
