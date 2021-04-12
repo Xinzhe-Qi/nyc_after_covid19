@@ -323,7 +323,8 @@ ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
     geom_polygon(aes(group = group, fill=diff, color = 'grey')) +
     scale_fill_distiller(palette = "YlGnBu", direction=1, na.value = 'grey') +
     theme_bw() +
-    labs(title = "Recovery since spring 2020 (difference in COVID impact between now and then)",
+    labs(title = "Recovery since spring 2020",
+        subtitle = "(difference in COVID impact between now and then)",
          x = "Longitude", y = "Latitude", fill = "Percentage point", color = "" ) +
     scale_color_manual(values = 'Grey', labels = 'Missing value') +
     guides(color = guide_legend(override.aes = list(fill = 'grey')))
