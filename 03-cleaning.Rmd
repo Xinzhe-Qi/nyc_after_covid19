@@ -42,7 +42,9 @@ nyc_buroughs = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten_Island")
 
 # Business data
 ny_business = business %>% filter(address_city %in% nyc_buroughs)
+```
 
+```{r}
 # License data
 # Match zipcode to borough
 url <- "http://faculty.baruch.cuny.edu/geoportal/resources/nyc_geog/zip_to_zcta10_nyc_revised.xls"
@@ -58,6 +60,21 @@ levels(ny_license$borough) <- nyc_buroughs
 # Drop columns that are not needed.
 drops <- c("business_name","contact_phone")
 ny_license <- ny_license[ , !(names(ny_license) %in% drops)]
+
+# zip (ZCTA) to Census PUMA matching
+url <- "http://faculty.baruch.cuny.edu/geoportal/resources/nyc_geog/nyc_zcta10_to_puma10.xls"
+download.file(url, "nyc_zcta10_to_puma10.xls")
+zcta_to_puma <- readxl::read_excel("nyc_zcta10_to_puma10.xls", sheet = "zctas_assigned")
+
+ny_license <- inner_join(x = ny_license, 
+                         y = select(zcta_to_puma, zcta10, stateco, puma10, pumaname, nameshort),
+                         by=c("zcta5"="zcta10"))
+```
+
+```{r}
+# Download PUMA data
+ny_acs <- read.csv("resources/acs.csv")
+
 ```
 
 
