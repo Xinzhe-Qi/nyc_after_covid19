@@ -205,7 +205,7 @@ impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>%
 
 The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.
 
-Plot of operating business
+## Operating businesses in NYC
 ```{r}
 ny_business = ny_business %>% 
   mutate(license_creation_date = as.Date(license_creation_date),
@@ -249,10 +249,11 @@ ggplot(data = month_year_busi,
 
 
 ``` {r}
-business %>% group_by(industry) %>% 
+busiCount = business %>% group_by(industry) %>% 
   summarize(count = n()) %>% 
-  mutate(industry = fct_reorder(industry, count, .desc = FALSE)) %>% 
-  ggplot(aes(y=industry, x=count)) + 
+  mutate(industry = fct_reorder(industry, count, .desc = FALSE))
+write.csv(busiCount, "busiCount.csv")
+ggplot(busiCount, aes(y=industry, x=count)) + 
   geom_bar(stat = "identity")
 ```
 
