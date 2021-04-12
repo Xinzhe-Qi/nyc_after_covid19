@@ -6,6 +6,7 @@ nyc-geographies
 data-transformation
 read-data
 processing-business-license-data-from-nyc-opendata
+getting-census-bureaus-american-community-survey-data-with-api
 missing-values
 results
 searching-for-trends

@@ -143,6 +143,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a><ul>
 <li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#processing-business-license-data-from-nyc-opendata"><i class="fa fa-check"></i><b>3.1.1</b> Processing business license data from NYC OpenData</a></li>
+<li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#getting-census-bureaus-american-community-survey-data-with-api"><i class="fa fa-check"></i><b>3.1.2</b> Getting Census Bureau’s American Community Survey data with API</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
@@ -194,6 +195,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  [9] &quot;SAINT ALBANS&quot;   &quot;HEMPSTEAD&quot;</code></pre>
 <p>Given this limitation, we cannot track down where the businesses are exactly located in the city. However, we can still narrow our analysis to those that were filed from addresses in NYC. Setting this filter on the data can help us focus on the entrepreneurism of the city’s residents. With the help of the zip-code-to-borough mapping by <a href="https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies">Baruch College</a>, we picked the records that match the list of zip codes corresponding to the five boroughs in NYC (Manhattan, Bronx, Queens, Brooklyn and Stetan Island).</p>
 <p>Moreover, various contact information which is not needed in this analysis was removed for privacy as well as to keep the data size small. In addition, we disregard a small sample of applications that are denied, withdrawn, or pending. The vast majority of these cases are due to errors made by the applicants while filling out the DCA form. At this stage, we do not drop any rows or columns with missing values.</p>
+</div>
+<div id="getting-census-bureaus-american-community-survey-data-with-api" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Getting Census Bureau’s American Community Survey data with API</h3>
+<p>As mentioned in the previous chapter, the Census Bureau offers an API access. The detailed <a href="https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-guide.pdf">user guide</a> can be found here. We use the <code>tidycensus</code> package to download data more efficiently. One must obtain a unique key to interact with API using this <a href="http://api.census.gov/data/key_signup.html">link</a>. The <code>tidycensus</code> package offers easy-to-use functions to download the data and control parameters for geographies and a survey vintage.</p>
+<p>For our exercise, we used <a href="https://www.census.gov/newsroom/press-kits/2020/acs-1year.html">2019 ACS single-year estimates</a>. Instead of explaining how to use the <code>tidycensus</code> package in detail, we included sample <code>R</code> codes that we used to process the data in our <a href="https://github.com/kennylee15/nyc_after_covid19/blob/main/census_acs_query.R">repository</a>. A static version of the resulting data file from the codes is also in our <a href="https://github.com/kennylee15/nyc_after_covid19/blob/main/resources/acs.csv">repository</a>.</p>
 
 </div>
 </div>

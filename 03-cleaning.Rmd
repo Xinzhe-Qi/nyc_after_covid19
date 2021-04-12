@@ -87,4 +87,8 @@ ny_acs_wide <-left_join(ny_acs_wide, ny_acs[!duplicated(ny_acs$GEOID), c("puma10
 
 
 
+### Getting Census Bureau's American Community Survey data with API
 
+As mentioned in the previous chapter, the Census Bureau offers an API access. The detailed [user guide](https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-guide.pdf) can be found here. We use the `tidycensus` package to download data more efficiently. One must obtain a unique key to interact with API using this [link](http://api.census.gov/data/key_signup.html). The `tidycensus` package offers easy-to-use functions to download the data and control parameters for geographies and a survey vintage.
+
+For our exercise, we used [2019 ACS single-year estimates](https://www.census.gov/newsroom/press-kits/2020/acs-1year.html). Instead of explaining how to use the `tidycensus` package in detail, we included sample `R` codes that we used to process the data in our [repository](https://github.com/kennylee15/nyc_after_covid19/blob/main/census_acs_query.R). A static version of the resulting data file from the codes is also in our [repository](https://github.com/kennylee15/nyc_after_covid19/blob/main/resources/acs.csv). 
