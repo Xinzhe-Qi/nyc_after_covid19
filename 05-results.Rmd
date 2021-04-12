@@ -330,6 +330,8 @@ ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
     guides(color = guide_legend(override.aes = list(fill = 'grey')))
 ```
 
+In particular, neighborhoods that are relatively residential compared to others, usually farther out in the Bronx, Queens, and Brooklyn have shown stronger recoveries. The recovery in neighborhoods that are more commercial such as Financial District and Downtown Brooklyn is lagging, reflecting a shift in lifestyle since the pandemic. With a large share of office workers yet to return to offices, the recovery in these areas might take longer. Note that the neighborhood boundary lines mapped above follow the Census Bureau's Public Use Microdata Area (PUMA). While NYC neighborhoods generally correlate with PUMA, some multiple neighborhoods can be bucketed together into one larger PUMA. Check this [link](https://www1.nyc.gov/assets/planning/download/pdf/data-maps/nyc-population/census2010/puma_cd_map.pdf) for an official mapping between Community Districts and PUMA by NYC officials. 
+
 ## Operating businesses in NYC
 ```{r}
 ny_business = ny_business %>% 
