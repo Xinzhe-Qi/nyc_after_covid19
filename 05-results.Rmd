@@ -308,7 +308,7 @@ library(mapproj)
 # Geo JSON
 # base_url <- "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Community_Districts/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=pgeojson"
 base_url <-"https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Public_Use_Microdata_Areas_PUMAs/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson"
-NYCdistricts <- readOGR(base_url, 'OGRGeoJSON', verbose = T)
+NYCdistricts <- readOGR(base_url, 'OGRGeoJSON', verbose = FALSE)
 
 # Add preceding zero to puma codes
 NYCdistricts@data$puma10 <- paste0("0",NYCdistricts@data$PUMA)
