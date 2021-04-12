@@ -119,7 +119,8 @@ ggplot(data = month_year_lic,
                 group = start_year, color = start_year)) + 
   geom_line() +
   labs(title = "Seasonal plot of license applications in each month",
-       subtitle = "From 2017 to 2021", y = "Count", x = "Months")
+       subtitle = "From 2017 to 2021", y = "Count", x = "Months") +
+  theme_light()
 ```
 
 Afterward, we aggregate these lines together by month to summarize seasonal behavior by month. Below, we summarize the seasonal behavior of the data by month using a subset of the data between 2016 and 2019 as the pandemic brought a shift in trend in our data in 2020. This chart shows a seasonal pattern more succinctly. The median value for each month, represented by the horizontal line in each box, is a good proxy for the seasonal pattern of the data. High upper whiskers in April and November are due to distortions caused by policy changes in the period between November 2017 and April 2018.
@@ -340,19 +341,14 @@ ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
 In particular, neighborhoods that are relatively residential compared to others, usually farther out in the Bronx, Queens, and Brooklyn have shown stronger recoveries. The recovery in neighborhoods that are more commercial such as Financial District and Downtown Brooklyn is lagging, reflecting a shift in lifestyle since the pandemic. With a large share of office workers yet to return to offices, the recovery in these areas might take longer. Note that the neighborhood boundary lines mapped above follow the Census Bureau's Public Use Microdata Area (PUMA). While NYC neighborhoods generally correlate with PUMA, some multiple neighborhoods can be bucketed together into one larger PUMA. Check this [link](https://www1.nyc.gov/assets/planning/download/pdf/data-maps/nyc-population/census2010/puma_cd_map.pdf) for an official mapping between Community Districts and PUMA by NYC officials. 
 
 ## Operating businesses in NYC
+
 ```{r}
 ny_business = ny_business %>% 
   mutate(license_creation_date = as.Date(license_creation_date),
          lic_expir_dd = as.Date(lic_expir_dd)) %>% 
   filter(license_creation_date <= lic_expir_dd) %>% # some weird data here, creation should be earlier than expiration
   drop_na(license_creation_date, lic_expir_dd)
-
-b_indi = ny_business %>% filter(license_type=="Individual")
-#head(b_indi)
-b_busi = ny_business %>% filter(license_type=="Business")
-#head(b_busi)
 ```
-
 
 ```{r}
 mon_seq <- function(start, end){
@@ -372,13 +368,15 @@ month_year_busi = countMonthActive %>%
 #head(countMonthActive)
 ```
 
+Here we investigate the number of operating businesses in NYC, using previous four years as references. As we can see that operating businesses with NYC mailing addresses are declining over years, and 2020 shows the most dramatic decline of all, starting from March. Note that the numbers here only shows the businesses with NYC mailing addresses, so there could be many cases where the mailing addresses are out of NYC but still operate in NYC. Even so, we can still see a clear severe impact on these businesses since pandemic.   
 ```{r}
 ggplot(data = month_year_busi, 
             aes(x = month, y = Count, 
                 group = year, color = year)) + 
   geom_line() +
   labs(title = "Seasonal plot of operating businesses in each month",
-       subtitle = "From 2017 to 2021")
+       subtitle = "From 2017 to 2021") +
+  theme_light()
 ```
 
 
@@ -387,15 +385,11 @@ busiCount = business %>% group_by(industry) %>%
   summarize(count = n()) %>% 
   mutate(industry = fct_reorder(industry, count, .desc = FALSE))
 write.csv(busiCount, "busiCount.csv")
-ggplot(busiCount, aes(y=industry, x=count)) + 
-  geom_bar(stat = "identity")
 ```
 
-``` {r, eval = FALSE}
-ny_business %>% 
-  ggplot(aes(x=license_type)) + 
-  geom_bar(stat = "count")
+We find that within NYC, business license type is way more than individual license type. And large majority of the licenses are issued in Bronx and Brooklyn.
 
+``` {r, eval = FALSE}
 ny_business %>% 
     ggplot(aes(x = address_city, y=..count.., fill=license_type)) + 
     stat_count(geom="bar") +
