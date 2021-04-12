@@ -13,12 +13,22 @@ var svg = d3.select("#my_dataviz")
           "translate(" + margin.left + "," + margin.top + ")");
 
 d3.csv("busiCount.csv", function(data) {
-
+      
   // sort data
   data.sort(function(b, a) {
     return a.count - b.count;
   });
-
+  
+  const text = svg
+    .append('text')
+    .attr("id", 'toptext')
+    .attr("x", width - 400)
+    .attr("y", 80)
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("font-family", "sans-serif")
+    .text("Numbers: 0");
+    
   // X axis
   var x = d3.scaleBand()
     .range([ 0, width ])
@@ -47,5 +57,19 @@ d3.csv("busiCount.csv", function(data) {
       .attr("y", function(d) { return y(d.count); })
       .attr("width", x.bandwidth())
       .attr("height", function(d) { return height - y(d.count); })
-      .attr("fill", "#69b3a2");
+      .attr("fill", "#69b3a2")
+      .on('mouseover', function(d, i) {
+          console.log(i);
+          d3.select(this).attr('style', 'fill: orange;');
+          d3.select("#toptext").text(`Numbers: ${d.count}`);
+        })
+      .on('mouseout', function(d, i) {
+          d3.select(this).attr('style', 'outline: thin solid clear;');
+          d3.select("#toptext").text(`Numbers: ${0}`);
+        });
 });
+
+
+
+
+
