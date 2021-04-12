@@ -389,7 +389,7 @@ write.csv(busiCount, "busiCount.csv")
 
 We find that within NYC, business license type is way more than individual license type. And large majority of the licenses are issued in Bronx and Brooklyn.
 
-``` {r, eval = FALSE}
+``` {r}
 ny_business %>% 
     ggplot(aes(x = address_city, y=..count.., fill=license_type)) + 
     stat_count(geom="bar") +

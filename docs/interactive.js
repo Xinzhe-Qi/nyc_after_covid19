@@ -1,6 +1,6 @@
 // set the dimensions and margins of the graph
 var margin = {top: 50, right: 0, bottom: 50, left: 160},
-    width = 900 - margin.left - margin.right,
+    width = 800 - margin.left - margin.right,
     height = 700 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -22,8 +22,8 @@ d3.csv("https://raw.githubusercontent.com/kennylee15/nyc_after_covid19/main/busi
   const text = svg
     .append('text')
     .attr("id", 'toptext')
-    .attr("x", width - 400)
-    .attr("y", 80)
+    .attr("x", width - 200)
+    .attr("y", 200)
     .attr("dx", "-.8em")
     .attr("dy", ".15em")
     .attr("font-family", "sans-serif")
