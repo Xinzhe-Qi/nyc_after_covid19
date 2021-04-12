@@ -4,3 +4,4 @@
 .Ruserdata
 # Ignore all Excel files
 *.xls
+.DS_Store

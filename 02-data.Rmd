@@ -27,7 +27,17 @@ Companies and individuals can file for licenses from an address that is not in a
 
 ## The US Census Bureau's American Community Survey
 
-- Census Bureau’s [ACS data](https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/)
+**Context** 
+
+Census Bureau’s [American Community Survey (ACS)](https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/) offers high-quality information on a wide range of topics such as educational attainment, living situation, and income distribution. The ACS provides local community leaders vital social and economic information for policy decisions. Unlike the decennial census, the ACS is conducted on a yearly basis to provide more timely information. 
+
+**Acquisition** 
+
+The ACS data can be downloaded directly from [here](https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/) by browsing through the list of pre-generated tables. The Census Bureau offers an API access. The detailed [user guide](https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-guide.pdf) can be found here. We use the `tidycensus` package to download data more efficiently.
+
+**Limitation**
+
+The limitation of the ACS is that it is unavailable on a higher frequency. 
 
 ## NYC Geographies
 

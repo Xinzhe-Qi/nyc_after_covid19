@@ -205,6 +205,77 @@ impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>%
 
 The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.
 
+### Do demographic factors matter?
+
+We draw demographic information from the Census Bureau's latest 2019 American Community Survey (one-year estimates) corresponding to NYC's neighborhoods delineated by Community Districts. Three demographic variables we consider are
+
+- `Broadband`: percent of households in a region with a broadband internet access,
+- `Education`: percent of population aged 25+ with bachelors' degree or higher,
+- `Poverty`: percent of people living below the federally defined poverty threshold.
+
+We examine the relationship between these variables and the impact of the pandemic on license applications for new businesses. The chart below shows scatterplots with lines representing best fits estimated with simple least square estimators.
+
+``` {r}
+# Calculate the baseline (pre-COVID)
+precovid_license_puma <- ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
+  mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+  filter(months < as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+  mutate(start_month=format(start_date, "%m"), 
+         start_year=format(start_date, "%Y")) %>% 
+  group_by(start_year, start_month, puma10) %>% 
+  # Get a table of sums of application by year, month and puma10
+  summarize(applications=n()) %>% 
+  # Take the median by puma10 and month across years
+  group_by(puma10, start_month) %>% 
+  summarise(med = median(applications)) 
+
+# Post-COVID data
+postcovid_license_puma <- ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
+  mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+  filter(months >=  as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+  mutate(start_month=format(start_date, "%m"), 
+         start_year=format(start_date, "%Y")) %>% 
+  group_by(start_year, start_month, puma10) %>% summarize(count=n())
+
+postcovid_license_puma <- postcovid_license_puma %>%
+  pivot_wider(id_cols = c(puma10,start_month), names_from = start_year, values_from = count) %>% 
+  arrange(puma10)
+colnames(postcovid_license_puma)[3:4] <- c("y2020", "y2021")
+
+# Combine the two dataframes
+combined_puma <- inner_join(precovid_license_puma, postcovid_license_puma, by=c("puma10", "start_month"))
+combined_puma <- combined_puma %>% mutate(pc2020 = y2020/med*100-100, pc2021 = y2021/med*100-100)
+
+# The impact is calculated here and saved in a long data format
+impact_puma <- combined_puma %>% 
+  select(puma10, start_month, pc2020, pc2021) %>%
+  pivot_longer(cols = starts_with("pc"), names_to = "year", values_to = "impact" ) %>%
+  arrange(puma10, year) %>% 
+  mutate(months = as.Date(paste(gsub("pc", "", year), start_month, "01", sep="-" ), format="%Y-%m-%d") )
+
+# impact_puma %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>% 
+#   ggplot(aes(x=months, y=impact, color=puma10)) +
+#   theme_bw() +
+#   theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+#   theme(panel.grid.minor = element_blank()) +
+#   geom_line(size = 0.7) +
+#   labs(title = "Impact of pandemic on the approved license applications by NYC puma10s",
+#        x = "", y = "Change from baseline (%)", color = "puma10") +
+#   scale_x_date(date_labels = "%b-%y", date_breaks = "3 month") 
+
+latest_impact_puma <- impact_puma %>% filter(months == as.Date("2021-03-01", format = "%Y-%m-%d"))
+latest_impact_puma_acs <- left_join(ny_acs, latest_impact_puma, by = c("puma10"="puma10"))
+
+library(lattice)
+xyplot(impact ~ estimate | varlab, 
+       data = latest_impact_puma_acs, type = c("p", "r"),
+       ylab = "Impact (%)", xlab = "Estimate")
+```
+
+The best fit line with `Education` as an explanatory variable is a poor fit of the data. The first and third variables (`Broadband` and `Poverty`) seem to be more relevant to the dependent variable, but the relationship does not appear to be strong.
+
 ## Operating businesses in NYC
 ```{r}
 ny_business = ny_business %>% 

@@ -74,7 +74,15 @@ ny_license <- inner_join(x = ny_license,
 ```{r}
 # Download PUMA data
 ny_acs <- read.csv("resources/acs.csv")
+ny_acs <- ny_acs %>% mutate(puma10 = substr((ny_acs$GEOID),3,8))
 
+# Wide forms
+ny_acs_wide <- pivot_wider(data = ny_acs, id_cols = puma10,
+                           names_from = varlab, values_from = estimate)
+
+# Bring in names
+ny_acs_wide <-left_join(ny_acs_wide, ny_acs[!duplicated(ny_acs$GEOID), c("puma10", "NAME")], 
+                        by = c("puma10"="puma10"))
 ```
 
 

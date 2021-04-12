@@ -24,7 +24,7 @@
 <meta name="author" content="Kenny Lee, Xinzhe Qi" />
 
 
-<meta name="date" content="2021-04-11" />
+<meta name="date" content="2021-04-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -151,7 +151,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#new-application-vs.-renewal"><i class="fa fa-check"></i><b>5.1.1</b> New application vs. renewal</a></li>
 <li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#seasonality-in-data"><i class="fa fa-check"></i><b>5.1.2</b> Seasonality in data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#scaling-the-impact-of-the-pandemic"><i class="fa fa-check"></i><b>5.2</b> Scaling the impact of the pandemic</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#scaling-the-impact-of-the-pandemic"><i class="fa fa-check"></i><b>5.2</b> Scaling the impact of the pandemic</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#do-demographic-factors-matter"><i class="fa fa-check"></i><b>5.2.1</b> Do demographic factors matter?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#operating-businesses-in-nyc"><i class="fa fa-check"></i><b>5.3</b> Operating businesses in NYC</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -200,9 +203,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="the-us-census-bureaus-american-community-survey" class="section level2">
 <h2><span class="header-section-number">2.2</span> The US Census Bureau’s American Community Survey</h2>
-<ul>
-<li>Census Bureau’s <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/">ACS data</a></li>
-</ul>
+<p><strong>Context</strong></p>
+<p>Census Bureau’s <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/">American Community Survey (ACS)</a> offers high-quality information on a wide range of topics such as educational attainment, living situation, and income distribution. The ACS provides local community leaders vital social and economic information for policy decisions. Unlike the decennial census, the ACS is conducted on a yearly basis to provide more timely information.</p>
+<p><strong>Acquisition</strong></p>
+<p>The ACS data can be downloaded directly from <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/">here</a> by browsing through the list of pre-generated tables. The Census Bureau offers an API access. The detailed <a href="https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-guide.pdf">user guide</a> can be found here. We use the <code>tidycensus</code> package to download data more efficiently.</p>
+<p><strong>Limitation</strong></p>
+<p>The limitation of the ACS is that it is unavailable on a higher frequency.</p>
 </div>
 <div id="nyc-geographies" class="section level2">
 <h2><span class="header-section-number">2.3</span> NYC Geographies</h2>
