@@ -33,6 +33,7 @@
   
 <link rel="prev" href="missing-values.html"/>
 <link rel="next" href="interactive-component.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,22 +51,21 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -85,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -135,20 +135,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a><ul>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#nyc-opendata"><i class="fa fa-check"></i><b>2.1</b> NYC OpenData</a></li>
 <li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#the-us-census-bureaus-american-community-survey"><i class="fa fa-check"></i><b>2.2</b> The US Census Bureau’s American Community Survey</a></li>
 <li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#nyc-geographies"><i class="fa fa-check"></i><b>2.3</b> NYC Geographies</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a><ul>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#processing-business-license-data-from-nyc-opendata"><i class="fa fa-check"></i><b>3.1.1</b> Processing business license data from NYC OpenData</a></li>
 <li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#getting-census-bureaus-american-community-survey-data-with-api"><i class="fa fa-check"></i><b>3.1.2</b> Getting Census Bureau’s American Community Survey data with API</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#searching-for-trends"><i class="fa fa-check"></i><b>5.1</b> Searching for trends</a><ul>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#searching-for-trends"><i class="fa fa-check"></i><b>5.1</b> Searching for trends</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#new-application-vs.-renewal"><i class="fa fa-check"></i><b>5.1.1</b> New application vs. renewal</a></li>
 <li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#seasonality-in-data"><i class="fa fa-check"></i><b>5.1.2</b> Seasonality in data</a></li>
 </ul></li>
@@ -177,13 +182,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="results" class="section level1">
+<div id="results" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
-<div id="searching-for-trends" class="section level2">
+<div id="searching-for-trends" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Searching for trends</h2>
 <p>The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Staten Island saw substantial increases in newly approved licenses.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<div id="new-application-vs.-renewal" class="section level3">
+<div id="new-application-vs.-renewal" class="section level3" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> New application vs. renewal</h3>
 <p>In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests a cyclical factor driving this behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city <a href="%22https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page%22">regulation</a>, home improvement contractors must renew their licenses every two years. The license data indicate there are 60 industries that the city grants licenses to. The bar chart below shows top 10 industries that receive licenses from the city since 2016, as a percent share of the total number approved licenses (there are about 185 thousand records across 60 industries). Among those, home improvement is at the top, accounting for more than 15% of all licenses authorized.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
@@ -194,7 +199,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>It is also noteworthy that large shares of applications for new licenses originate from outer-boroughs, which contradict a common perception that Manhattan is the business district of the city. The bar chart below shows that Brooklyn and Queens led approved applications for new licenses since 2016. Here, bars corresponding to boroughs are arranged in descending order.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
-<div id="seasonality-in-data" class="section level3">
+<div id="seasonality-in-data" class="section level3" number="5.1.2">
 <h3><span class="header-section-number">5.1.2</span> Seasonality in data</h3>
 <p>Time series of business data often display seasonality. We first show the time series of applications for new licenses in all of NYC by year in one chart. The lines for 2020 and 2021 are substantially below the lines for other years, reflecting the impact of the pandemic. The data for November 2017 through April 2018 were affected by a one-off change in license regulation, as discussed above. Overall, the chart below indicates new business application tends to rise in spring and gradually slows over the summer and winter.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
@@ -202,14 +207,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 </div>
 </div>
-<div id="scaling-the-impact-of-the-pandemic" class="section level2">
+<div id="scaling-the-impact-of-the-pandemic" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Scaling the impact of the pandemic</h2>
 <p>To measure the impact of the pandemic, we need a baseline, estimated during the period prior to the pandemic. We calculate monthly baseline levels by borough by taking the median count of approved applications for new licenses by month between 2016 and 2019. For example, the baseline level of approved business applications for Brooklyn in March is calculated as the median of the sums of approved applications for new licenses in Brooklyn respectively in March 2016, March 2017, March 2018, and March 2019. The impact of the pandemic is calculated as the percent difference from these monthly median values by borough.</p>
 <p>By comparing the more recent data month by month to the baseline, we can estimate the impact of the pandemic while avoiding seasonal distortions. The resulting metrics are shown below.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 <p>The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.</p>
 </div>
-<div id="do-demographic-factors-matter-in-recovery" class="section level2">
+<div id="do-demographic-factors-matter-in-recovery" class="section level2" number="5.3">
 <h2><span class="header-section-number">5.3</span> Do demographic factors matter in recovery?</h2>
 <p>Against the backdrop of accelerating vaccine distribution, we hope to examine the relationship between demographic variables and recovery since the spring lockdown in 2020. We draw demographic information from the Census Bureau’s latest 2019 American Community Survey (ACS) corresponding to NYC Community Districts, which roughly correspond to areas commonly known as “neighborhoods.” We used these disaggregated data instead of borough level aggregates for a more robust analysis as there are 55 Community Districts in total. The three demographic variables from the ACS we consider are</p>
 <ul>
@@ -222,13 +227,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The chart above indicates that the best fit lines with <code>Education</code> and <code>Broadband</code> as explanatory variables and recovery since April-June 2020 are downward sloping. That is, the higher the percent share of the population with education level at or above bachelor’s degree and the percent share of households with high-speed broadband access, the lower the recovery has been. With poverty as an explanatory variable, the best fit line is upward sloping, meaning that the higher the share of the population living under poverty, the stronger the recovery has been.</p>
 <p>This result may sound counter-intuitive to some. However, this result could be due to the fact that many NYC residents with more financial resources have exited the city during the extended period of lockdown since spring 2020.</p>
 <p>The following chart is a choropleth map of NYC with the fill color showing the degree of recovery since spring 2020. This chart shows that while neighborhoods outside Manhattan may have been initially hit more harshly by the pandemic, their recovery since spring 2020 has been more robust than neighborhoods in Manhattan.</p>
+<pre><code>## [1] TRUE</code></pre>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <p>In particular, neighborhoods that are relatively residential compared to others, usually farther out in the Bronx, Queens, and Brooklyn have shown stronger recoveries. The recovery in neighborhoods that are more commercial such as Financial District and Downtown Brooklyn is lagging, reflecting a shift in lifestyle since the pandemic. With a large share of office workers yet to return to offices, the recovery in these areas might take longer. Note that the neighborhood boundary lines mapped above follow the Census Bureau’s Public Use Microdata Area (PUMA). While NYC neighborhoods generally correlate with PUMA, some multiple neighborhoods can be bucketed together into one larger PUMA. Check this <a href="https://www1.nyc.gov/assets/planning/download/pdf/data-maps/nyc-population/census2010/puma_cd_map.pdf">link</a> for an official mapping between Community Districts and PUMA by NYC officials.</p>
 </div>
-<div id="operating-businesses-in-nyc" class="section level2">
+<div id="operating-businesses-in-nyc" class="section level2" number="5.4">
 <h2><span class="header-section-number">5.4</span> Operating businesses in NYC</h2>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Here we investigate the number of operating businesses in NYC, using previous four years as references. As we can see that operating businesses with NYC mailing addresses are declining over years, and 2020 shows the most dramatic decline of all, starting from March. Note that the numbers here only shows the businesses with NYC mailing addresses, so there could be many cases where the mailing addresses are out of NYC but still operate in NYC. Even so, we can still see a clear severe impact on these businesses since pandemic.<br />
+<img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>We find that within NYC, business license type is way more than individual license type. And large majority of the licenses are issued in Bronx and Brooklyn.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 
 </div>
 </div>

@@ -33,6 +33,7 @@
   
 <link rel="prev" href="data-sources.html"/>
 <link rel="next" href="missing-values.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,22 +51,21 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -85,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -135,20 +135,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a><ul>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#nyc-opendata"><i class="fa fa-check"></i><b>2.1</b> NYC OpenData</a></li>
 <li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#the-us-census-bureaus-american-community-survey"><i class="fa fa-check"></i><b>2.2</b> The US Census Bureau’s American Community Survey</a></li>
 <li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#nyc-geographies"><i class="fa fa-check"></i><b>2.3</b> NYC Geographies</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a><ul>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#processing-business-license-data-from-nyc-opendata"><i class="fa fa-check"></i><b>3.1.1</b> Processing business license data from NYC OpenData</a></li>
 <li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#getting-census-bureaus-american-community-survey-data-with-api"><i class="fa fa-check"></i><b>3.1.2</b> Getting Census Bureau’s American Community Survey data with API</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#searching-for-trends"><i class="fa fa-check"></i><b>5.1</b> Searching for trends</a><ul>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#searching-for-trends"><i class="fa fa-check"></i><b>5.1</b> Searching for trends</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#new-application-vs.-renewal"><i class="fa fa-check"></i><b>5.1.1</b> New application vs. renewal</a></li>
 <li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#seasonality-in-data"><i class="fa fa-check"></i><b>5.1.2</b> Seasonality in data</a></li>
 </ul></li>
@@ -177,17 +182,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-transformation" class="section level1">
+<div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
-<div id="read-data" class="section level2">
+<div id="read-data" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Read Data</h2>
-<div id="processing-business-license-data-from-nyc-opendata" class="section level3">
+<div id="processing-business-license-data-from-nyc-opendata" class="section level3" number="3.1.1">
 <h3><span class="header-section-number">3.1.1</span> Processing business license data from NYC OpenData</h3>
 <p>The Scrata’s API (an official third-party provider that powers NYC Open Data) provides a query language called the “Socrata Query Language” or “SoQL”. See technical details <a href="https://dev.socrata.com/docs/queries/">here</a>. With carefully designed queries, we can pull down data which are pre-processed on the server side.</p>
 <p>For example, the following query will download data from January 2017 to May 2021 (or latest available) with the filing address in NY state.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data-transformation.html#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;RSocrata&quot;</span>) <span class="co"># load the RSocrata package</span></span>
-<span id="cb1-2"><a href="data-transformation.html#cb1-2"></a>license =<span class="st"> </span><span class="kw">read.socrata</span>(</span>
-<span id="cb1-3"><a href="data-transformation.html#cb1-3"></a>  <span class="st">&quot;https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between &#39;2017-01-01&#39; and &#39;2021-05-01&#39; and state=&#39;NY&#39;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="data-transformation.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;RSocrata&quot;</span>) <span class="co"># load the RSocrata package</span></span>
+<span id="cb1-2"><a href="data-transformation.html#cb1-2" aria-hidden="true" tabindex="-1"></a>license <span class="ot">=</span> <span class="fu">read.socrata</span>(</span>
+<span id="cb1-3"><a href="data-transformation.html#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between &#39;2017-01-01&#39; and &#39;2021-05-01&#39; and state=&#39;NY&#39;&quot;</span>)</span></code></pre></div>
 <p>Note that the source data do not offer clean information where the business is actually located as licensees can register with any mailing or permanent address that need not be in NYC. The below shows the first ten unique values of the city of the licenses filed between October and December 2019. As NYC Department of Consumer Affairs (DCA) does not fix idiosyncratic inputs by licensees, the geographical units are not uniform across the records.</p>
 <pre><code>##  [1] &quot;MOUNT VERNON&quot;   &quot;NEW WINDSOR&quot;    &quot;BROOKLYN&quot;       &quot;CHICAGO&quot;       
 ##  [5] &quot;JAMAICA&quot;        &quot;NEW YORK&quot;       &quot;MIDDLE VILLAGE&quot; &quot;BRONX&quot;         
@@ -195,7 +200,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Given this limitation, we cannot track down where the businesses are exactly located in the city. However, we can still narrow our analysis to those that were filed from addresses in NYC. Setting this filter on the data can help us focus on the entrepreneurism of the city’s residents. With the help of the zip-code-to-borough mapping by <a href="https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies">Baruch College</a>, we picked the records that match the list of zip codes corresponding to the five boroughs in NYC (Manhattan, Bronx, Queens, Brooklyn and Stetan Island).</p>
 <p>Moreover, various contact information which is not needed in this analysis was removed for privacy as well as to keep the data size small. In addition, we disregard a small sample of applications that are denied, withdrawn, or pending. The vast majority of these cases are due to errors made by the applicants while filling out the DCA form. At this stage, we do not drop any rows or columns with missing values.</p>
 </div>
-<div id="getting-census-bureaus-american-community-survey-data-with-api" class="section level3">
+<div id="getting-census-bureaus-american-community-survey-data-with-api" class="section level3" number="3.1.2">
 <h3><span class="header-section-number">3.1.2</span> Getting Census Bureau’s American Community Survey data with API</h3>
 <p>As mentioned in the previous chapter, the Census Bureau offers an API access. The detailed <a href="https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-guide.pdf">user guide</a> can be found here. We use the <code>tidycensus</code> package to download data more efficiently. One must obtain a unique key to interact with API using this <a href="http://api.census.gov/data/key_signup.html">link</a>. The <code>tidycensus</code> package offers easy-to-use functions to download the data and control parameters for geographies and a survey vintage.</p>
 <p>For our exercise, we used <a href="https://www.census.gov/newsroom/press-kits/2020/acs-1year.html">2019 ACS single-year estimates</a>. Instead of explaining how to use the <code>tidycensus</code> package in detail, we included sample <code>R</code> codes that we used to process the data in our <a href="https://github.com/kennylee15/nyc_after_covid19/blob/main/census_acs_query.R">repository</a>. A static version of the resulting data file from the codes is also in our <a href="https://github.com/kennylee15/nyc_after_covid19/blob/main/resources/acs.csv">repository</a>.</p>

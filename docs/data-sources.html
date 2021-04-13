@@ -33,6 +33,7 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="data-transformation.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,22 +51,21 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -85,7 +85,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -135,20 +135,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a><ul>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
 <li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#nyc-opendata"><i class="fa fa-check"></i><b>2.1</b> NYC OpenData</a></li>
 <li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#the-us-census-bureaus-american-community-survey"><i class="fa fa-check"></i><b>2.2</b> The US Census Bureau’s American Community Survey</a></li>
 <li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#nyc-geographies"><i class="fa fa-check"></i><b>2.3</b> NYC Geographies</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a><ul>
-<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a><ul>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#read-data"><i class="fa fa-check"></i><b>3.1</b> Read Data</a>
+<ul>
 <li class="chapter" data-level="3.1.1" data-path="data-transformation.html"><a href="data-transformation.html#processing-business-license-data-from-nyc-opendata"><i class="fa fa-check"></i><b>3.1.1</b> Processing business license data from NYC OpenData</a></li>
 <li class="chapter" data-level="3.1.2" data-path="data-transformation.html"><a href="data-transformation.html#getting-census-bureaus-american-community-survey-data-with-api"><i class="fa fa-check"></i><b>3.1.2</b> Getting Census Bureau’s American Community Survey data with API</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a><ul>
-<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#searching-for-trends"><i class="fa fa-check"></i><b>5.1</b> Searching for trends</a><ul>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#searching-for-trends"><i class="fa fa-check"></i><b>5.1</b> Searching for trends</a>
+<ul>
 <li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#new-application-vs.-renewal"><i class="fa fa-check"></i><b>5.1.1</b> New application vs. renewal</a></li>
 <li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#seasonality-in-data"><i class="fa fa-check"></i><b>5.1.2</b> Seasonality in data</a></li>
 </ul></li>
@@ -177,9 +182,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-sources" class="section level1">
+<div id="data-sources" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
-<div id="nyc-opendata" class="section level2">
+<div id="nyc-opendata" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> NYC OpenData</h2>
 <p><strong>Context</strong></p>
 <p>NYC OpenData is a data portal maintained by New York City. With a common set of standards and guidelines across the city’s numerous agencies, NYC OpenData offers thousands of high-quality data for public use. For our project, we look at the following two datasets on business licenses and applications from the NYC Department of Consumer Affairs (DCA). The business license application data will give us information on business formation in NYC.</p>
@@ -201,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Limitation</strong></p>
 <p>Companies and individuals can file for licenses from an address that is not in any of the five boroughs. The exact location of the business within NYC cannot be exactly confirmed. DCA only publishes the city, state, and postal Code of the mailing address for individual licenses.</p>
 </div>
-<div id="the-us-census-bureaus-american-community-survey" class="section level2">
+<div id="the-us-census-bureaus-american-community-survey" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> The US Census Bureau’s American Community Survey</h2>
 <p><strong>Context</strong></p>
 <p>Census Bureau’s <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/subject-tables/">American Community Survey (ACS)</a> offers high-quality information on a wide range of topics such as educational attainment, living situation, and income distribution. The ACS provides local community leaders vital social and economic information for policy decisions. Unlike the decennial census, the ACS is conducted on a yearly basis to provide more timely information.</p>
@@ -210,7 +215,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Limitation</strong></p>
 <p>The limitation of the ACS is that it is unavailable on a higher frequency.</p>
 </div>
-<div id="nyc-geographies" class="section level2">
+<div id="nyc-geographies" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> NYC Geographies</h2>
 <p><a href="https://library.baruch.cuny.edu/">Newman Library</a> at Baruch College, a school within the City University of New York, offers extensive work on maps and geographical crosswalks between various geographical units within NYC. Here’s the <a href="https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies">source</a>.</p>
 <p>In addition, we used a shapefile from NYC Planning Department to create choropleth maps. All official shapefiles for different geographical units can be found <a href="https://www1.nyc.gov/site/planning/data-maps/open-data.page#geocoding_application">here</a>. These files come in a <code>GeoJSON</code> format and match well with the delineation created by the Census Bureau. No additional cleaning is necessary.</p>
