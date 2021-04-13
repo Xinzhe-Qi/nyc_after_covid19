@@ -1,3 +1,73 @@
+--- 
+title: "NYC after COVID-19"
+author: "Kenny Lee, Xinzhe Qi"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+--- 
+title: "NYC after COVID-19"
+author: "Kenny Lee, Xinzhe Qi"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+---
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+# Introduction
+
+The COVID-19 pandemic has left indelible marks on New York City. On Sunday, March 14 2021, New Yorkers marked a year since the first registered fatalities from the pandemic. The city has come a long way since the onset of the pandemic, but there is definitely a long winding path ahead to full recovery. We hope to measure the city's recovery since then. 
+
+There are many questions to be answered. Which neighborhoods recovered fast and which neighborhoods did not? Are there other geographic, demographic and economic factors that may have affected the strength of the rebound in activity in a neighborhood? 
+
+We use NYC’s weekly data on regional operating business licenses to compare trends immediately before the pandemic (Jan-Feb 2020), the peak of the pandemic (Apr-Mar 2020) and a period of recovery (Jan-Feb 2021). To enrich our analysis, we draw Census Bureau’s ACS data to incorporate other demographic and economic data. These values can be control variables when we compare the changes in trends and demographics across the neighborhoods in NYC.
+
+<!--chapter:end:index.Rmd-->
+
+
+# Data sources
+
+Placeholder
+
+
+## NYC OpenData
+## The US Census Bureau's American Community Survey
+## NYC Geographies
+
+<!--chapter:end:02-data.Rmd-->
+
+
+# Data transformation
+
+Placeholder
+
+
+## Read Data
+### Processing business license data from NYC OpenData
+### Getting Census Bureau's American Community Survey data with API
+
+<!--chapter:end:03-cleaning.Rmd-->
+
+
+# Missing values
+
+Placeholder
+
+
+
+<!--chapter:end:04-missing.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
 # Results
 
 ## Searching for trends
@@ -307,6 +377,7 @@ library(maptools)
 library(mapproj)
 
 # Geo JSON
+# base_url <- "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Community_Districts/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=pgeojson"
 base_url <-"https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Public_Use_Microdata_Areas_PUMAs/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson"
 NYCdistricts <- readOGR(base_url, 'OGRGeoJSON', verbose = FALSE)
 
@@ -316,7 +387,7 @@ NYCdistricts@data$puma10 <- paste0("0",NYCdistricts@data$PUMA)
 # Combine data
 ggNYCdistricts <- fortify(NYCdistricts, region = "puma10") 
 
-# Join tabular data
+# join tabular data
 ggNYCdistricts <- left_join(ggNYCdistricts, inner_join(diff_impact_puma, ny_acs_wide, by="puma10") , by=c("id"="puma10"))
 
 ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
@@ -330,12 +401,9 @@ ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
     guides(color = guide_legend(override.aes = list(fill = 'grey')))
 
 # Output the file (don't run again)
-# temp <- NYCdistricts
-# temp@data <- left_join(temp@data, inner_join(diff_impact_puma, ny_acs_wide, by="puma10") , by="puma10")
-# 
-# temp <- select(temp, long, lat, order, hole, piece, id, group, diff)
+# temp <- select(ggNYCdistricts, long, lat, order, hole, piece, id, group, diff, Education, Poverty, Broadband, NAME)
 # topostring <- geojsonio::topojson_json(
-#     input = NYCdistricts, lat = "lat", long = "long", geometry= "polygon" )
+#     input = temp, lat = "lat", long = "long", geometry= "polygon" )
 # write(topostring, file = "NYC_topostring.json")
 
 ```
@@ -367,6 +435,7 @@ month_year_busi = countMonthActive %>%
   filter(Date > as.Date('2017-01-01')) %>% 
   mutate(month=format(Date, "%m"), 
          year=format(Date, "%Y"))
+#head(countMonthActive)
 ```
 
 Here we investigate the number of operating businesses in NYC, using previous four years as references. As we can see that operating businesses with NYC mailing addresses are declining over years, and 2020 shows the most dramatic decline of all, starting from March. Note that the numbers here only shows the businesses with NYC mailing addresses, so there could be many cases where the mailing addresses are out of NYC but still operate in NYC. Even so, we can still see a clear severe impact on these businesses since pandemic.   
@@ -385,15 +454,58 @@ ggplot(data = month_year_busi,
 busiCount = business %>% group_by(industry) %>% 
   summarize(count = n()) %>% 
   mutate(industry = fct_reorder(industry, count, .desc = FALSE))
+write.csv(busiCount, "busiCount.csv")
 ```
 
 We find that within NYC, business license type is way more than individual license type. And large majority of the licenses are issued in Bronx and Brooklyn.
 
-``` {r}
+``` {r, eval = FALSE}
 ny_business %>% 
     ggplot(aes(x = address_city, y=..count.., fill=license_type)) + 
     stat_count(geom="bar") +
     labs(title = "Operating businesses by boroughs",
-         x = "Regions", y = "Counts") +
-  theme_light()
+         x = "Regions", y = "Counts")
 ```
+
+<!--chapter:end:05-results.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Interactive component
+
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<p>
+Here is an interactive bar plot showing the categories of the operating businesses in NY. We can see that 
+the top ones are Home Improvement Contractor, Tabacco Retail, and Electronics. Hovering over the bars will show
+you the exact numbers of each industry.
+</p>
+
+<div id="my_dataviz"></div>
+
+<script src="interactive.js"></script>
+
+
+<!--chapter:end:06-interactive.Rmd-->
+
+```{r include=FALSE, cache=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+# Conclusion
+
+
+<!--chapter:end:07-conclusion.Rmd-->
+
