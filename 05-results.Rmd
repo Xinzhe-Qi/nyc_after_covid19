@@ -119,7 +119,7 @@ ggplot(data = month_year_lic,
                 group = start_year, color = start_year)) + 
   geom_line() +
   labs(title = "Seasonal plot of license applications in each month",
-       subtitle = "From 2017 to 2021", y = "Count", x = "Months") +
+       subtitle = "From 2017 to 2021", y = "Count", x = "Months", color = "Year") +
   theme_light()
 ```
 
@@ -295,7 +295,7 @@ xyplot(diff ~ estimate | varlab,
 
 The chart above indicates that the best fit lines with `Education` and `Broadband` as explanatory variables and recovery since April-June 2020 are downward sloping. That is, the higher the percent share of the population with education level at or above bachelor's degree and the percent share of households with high-speed broadband access, the lower the recovery has been. With poverty as an explanatory variable, the best fit line is upward sloping, meaning that the higher the share of the population living under poverty, the stronger the recovery has been.
 
-This result may sound counter-intuitive to some. However, this result could be due to the fact that many NYC residents with more financial resources have exited the city during the extended period of lockdown since spring 2020.
+This result may sound counterintuitive to some. However, this result could be due to the fact that many NYC residents with more financial resources have exited the city during the extended period of lockdown since spring 2020.
 
 The following chart is a choropleth map of NYC with the fill color showing the degree of recovery since spring 2020. This chart shows that while neighborhoods outside Manhattan may have been initially hit more harshly by the pandemic, their recovery since spring 2020 has been more robust than neighborhoods in Manhattan.
 
@@ -376,7 +376,7 @@ ggplot(data = month_year_busi,
                 group = year, color = year)) + 
   geom_line() +
   labs(title = "Seasonal plot of operating businesses in each month",
-       subtitle = "From 2017 to 2021") +
+       subtitle = "From 2017 to 2021", color = "Year") +
   theme_light()
 ```
 
@@ -387,13 +387,14 @@ busiCount = business %>% group_by(industry) %>%
   mutate(industry = fct_reorder(industry, count, .desc = FALSE))
 ```
 
-We find that within NYC, business license type is way more than individual license type. And large majority of the licenses are issued in Bronx and Brooklyn.
+We find that within NYC, business license type is more common than licenses filed by individuals. In addition, a large majority of the licenses are issued in Bronx and Brooklyn. Surprisingly, there is no record from Staten Island. The lack of the entire borough suggests a potential data quality problem. It is also somewhat odd that there are so few records from Manhattan and Queens. We suspect that a possible explanation could be many of the license holders filed their initial paperwork using the addresses that are not in NYC. Those records will get dropped out during our data cleaning process. 
+
 
 ``` {r}
 ny_business %>% 
     ggplot(aes(x = address_city, y=..count.., fill=license_type)) + 
     stat_count(geom="bar") +
     labs(title = "Operating businesses by boroughs",
-         x = "Regions", y = "Counts") +
+         x = "Regions", y = "Counts", fill = "License type")  +
   theme_light()
 ```
