@@ -306,7 +306,6 @@ library(sp)
 library(jsonlite)
 library(maptools)
 library(mapproj)
-if (!require(gpclib)) install.packages("gpclib", type="source")
 
 # Geo JSON
 base_url <-"https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Public_Use_Microdata_Areas_PUMAs/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson"
