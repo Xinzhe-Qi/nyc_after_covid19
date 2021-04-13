@@ -11,4 +11,4 @@ The COVID-19 pandemic has left indelible marks on New York City. On Sunday, Marc
 
 There are many questions to be answered. Which neighborhoods recovered fast and which neighborhoods did not? Are there other geographic, demographic and economic factors that may have affected the strength of the rebound in activity in a neighborhood? 
 
-We use NYC’s weekly data on regional operating business licenses to compare trends immediately before the pandemic (Jan-Feb 2020), the peak of the pandemic (Apr-Mar 2020) and a period of recovery (Jan-Feb 2021). To enrich our analysis, we draw Census Bureau’s ACS data to incorporate other demographic and economic data. These values can be control variables when we compare the changes in trends and demographics across the neighborhoods in NYC.
+We use NYC’s data on operating business licenses as well as applications for new licenses to assess economic recovery since the onset of the pandemic. To enrich our analysis, we draw Census Bureau’s ACS data to incorporate other demographic and economic data. These values can be control variables when we compare the changes in trends and demographics across the neighborhoods in NYC.
