@@ -1,3 +1,36 @@
 # Interactive component
 
+<meta charset="utf-8">
 
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<p>
+Here is an interactive bar plot showing the categories of the operating businesses in NY. We can see that 
+the top ones are Home Improvement Contractor, Tabacco Retail, and Electronics. Hovering over the bars will show
+you the exact numbers of each industry.
+</p>
+
+<div id="my_dataviz"></div>
+
+<script src="interactive.js"></script>
+
+
+The following is the choropleth map where the fill color is the degree of recovery since spring 2020. The darker blue indicates weaker recovery, while the brighter color indicates stronger recovery. While this choropleth map is similar to the version presented in the earlier chapter (note color scheme has been flipped), it complements the earlier version by providing additional dimensions of information. A user can hover over each area to query the name of the area and demographic information alongside the estimate of recovery since spring 2020. 
+
+**Recovery since spring 2020**
+<div id="choropleth"></div>
+<script src="https://unpkg.com/d3@5.7.0/dist/d3.min.js"></script>
+<script src="https://unpkg.com/d3fc@14.0.27/build/d3fc.js"></script>
+<script src="https://d3js.org/d3.v5.js"></script>
+<script src="https://d3js.org/topojson.v2.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="script_choropleth.js"></script>
+<p>Area: <span id="area"></span></p> 
+<p>Recovery since spring 2020 (percentage point): <span id="recovery"></span></p> 
+<p>Population under poverty (%): <span id="pvty"></span></p> 
+<p>Household with high-speed internet access (%): <span id="hisp"></span></p> 
+<p>25+ Population with bachelor's degree or higher (%): <span id="educ"></span></p>
+
+The code to create the continuous color legend was adapted from this [blog post](https://blog.scottlogic.com/2019/03/13/how-to-create-a-continuous-colour-range-legend-using-d3-and-d3fc.html).

@@ -7,3 +7,8 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+The COVID-19 pandemic has left indelible marks on New York City. On Sunday, March 14 2021, New Yorkers marked a year since the first registered fatalities from the pandemic. The city has come a long way since the onset of the pandemic, but there is definitely a long winding path ahead to full recovery. We hope to measure the city's recovery since then. 
+
+There are many questions to be answered. Which neighborhoods recovered fast and which neighborhoods did not? Are there other geographic, demographic and economic factors that may have affected the strength of the rebound in activity in a neighborhood? 
+
+We use NYC’s data on operating business licenses as well as applications for new licenses to assess economic recovery since the onset of the pandemic. To enrich our analysis, we draw Census Bureau’s ACS data to incorporate other demographic and economic data. These values can be control variables when we compare the changes in trends and demographics across the neighborhoods in NYC.

@@ -1,14 +1,94 @@
 # Data transformation
 
 ## Read Data
+
+### Processing business license data from NYC OpenData
+
+The Scrata's API (an official third-party provider that powers NYC Open Data) provides a query language called the “Socrata Query Language” or “SoQL”. See technical details [here](https://dev.socrata.com/docs/queries/). With carefully designed queries, we can pull down data which are pre-processed on the server side. 
+
+For example, the following query will download data from January 2017 to May 2021 (or latest available) with the filing address in NY state. 
+
+```{r, eval=FALSE, echo=TRUE}
+library("RSocrata") # load the RSocrata package
+license = read.socrata(
+  "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2017-01-01' and '2021-05-01' and state='NY'")
+```
+
+
+Note that the source data do not offer clean information where the business is actually located as licensees can register with any mailing or permanent address that need not be in NYC. The below shows the first ten unique values of the city of the licenses filed between October and December 2019. As NYC  Department of Consumer Affairs (DCA) does not fix idiosyncratic inputs by licensees, the geographical units are not uniform across the records.
 ```{r}
-#install.packages("RSocrata")
-library("RSocrata") # read data using API
-license = read.socrata("https://data.cityofnewyork.us/resource/ptev-4hud.json?city='NEW YORK'&$limit=10")
-license
+library("RSocrata")
+temp = read.socrata(
+  "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2019-10-01' and '2019-12-01'"
+  )
+unique(temp$city)[0:10]
+```
+
+Given this limitation, we cannot track down where the businesses are exactly located in the city. However, we can still narrow our analysis to those that were filed from addresses in NYC. Setting this filter on the data can help us focus on the entrepreneurism of the city's residents. With the help of the zip-code-to-borough mapping by [Baruch College](https://www.baruch.cuny.edu/confluence/display/geoportal/NYC+Geographies), we picked the records that match the list of zip codes corresponding to the five boroughs in NYC (Manhattan, Bronx, Queens, Brooklyn and Stetan Island). 
+
+Moreover, various contact information which is not needed in this analysis was removed for privacy as well as to keep the data size small. In addition, we disregard a small sample of applications that are denied, withdrawn, or pending. The vast majority of these cases are due to errors made by the applicants while filling out the DCA form. At this stage, we do not drop any rows or columns with missing values.
+
+```{r message=F}
+library(RSocrata) 
+library(readxl)
+library(tidyverse)
+# Consider data through March only to get complete data through the end of the month
+license = read.socrata(
+    "https://data.cityofnewyork.us/resource/ptev-4hud.json?$where=start_date between '2016-01-01' and '2021-03-31' and state='NY' and status='Issued'")
+
+business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=lic_expir_dd between '2016-01-01' and '2021-03-31' and address_state='NY'")
+
+nyc_buroughs = c("Bronx", "Brooklyn", "Manhattan", "Queens", "Staten_Island")
+
+# Business data
+ny_business = business %>% filter(address_city %in% nyc_buroughs)
 ```
 
 ```{r}
-business = read.socrata("https://data.cityofnewyork.us/resource/w7w3-xahh.json?$where=address_state='NY'&$limit=10")
-business
+# License data
+# Match zipcode to borough
+url <- "http://faculty.baruch.cuny.edu/geoportal/resources/nyc_geog/zip_to_zcta10_nyc_revised.xls"
+download.file(url, "zip_to_zcta10_nyc_revised.xls")
+zip_to_zcta <- readxl::read_excel("zip_to_zcta10_nyc_revised.xls", sheet = "zip_to_zcta")
+
+ny_license <- inner_join(x = license, y = zip_to_zcta[,1:5], by=c("zip"="zipcode"))
+
+# Create a string factor that's easier for readers
+ny_license <- ny_license %>% mutate(borough = as.factor(bcode))
+levels(ny_license$borough) <- nyc_buroughs
+
+# Drop columns that are not needed.
+drops <- c("business_name","contact_phone")
+ny_license <- ny_license[ , !(names(ny_license) %in% drops)]
+
+# zip (ZCTA) to Census PUMA matching
+url <- "http://faculty.baruch.cuny.edu/geoportal/resources/nyc_geog/nyc_zcta10_to_puma10.xls"
+download.file(url, "nyc_zcta10_to_puma10.xls")
+zcta_to_puma <- readxl::read_excel("nyc_zcta10_to_puma10.xls", sheet = "zctas_assigned")
+
+ny_license <- inner_join(x = ny_license, 
+                         y = select(zcta_to_puma, zcta10, stateco, puma10, pumaname, nameshort),
+                         by=c("zcta5"="zcta10"))
 ```
+
+```{r}
+# Download PUMA data
+ny_acs <- read.csv("resources/acs.csv")
+ny_acs <- ny_acs %>% mutate(puma10 = substr((ny_acs$GEOID),3,8))
+
+# Wide forms
+ny_acs_wide <- pivot_wider(data = ny_acs, id_cols = puma10,
+                           names_from = varlab, values_from = estimate)
+
+# Bring in names
+ny_acs_wide <-left_join(ny_acs_wide, ny_acs[!duplicated(ny_acs$GEOID), c("puma10", "NAME")], 
+                        by = c("puma10"="puma10"))
+```
+
+
+
+### Getting Census Bureau's American Community Survey data with API
+
+As mentioned in the previous chapter, the Census Bureau offers an API access. The detailed [user guide](https://www.census.gov/content/dam/Census/data/developers/api-user-guide/api-guide.pdf) can be found here. We use the `tidycensus` package to download data more efficiently. One must obtain a unique key to interact with API using this [link](http://api.census.gov/data/key_signup.html). The `tidycensus` package offers easy-to-use functions to download the data and control parameters for geographies and a survey vintage.
+
+For our exercise, we used [2019 ACS single-year estimates](https://www.census.gov/newsroom/press-kits/2020/acs-1year.html). Instead of explaining how to use the `tidycensus` package in detail, we included sample `R` codes that we used to process the data in our [repository](https://github.com/kennylee15/nyc_after_covid19/blob/main/census_acs_query.R). A static version of the resulting data file from the codes is also in our [repository](https://github.com/kennylee15/nyc_after_covid19/blob/main/resources/acs.csv). 

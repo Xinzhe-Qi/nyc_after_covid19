@@ -1,1 +1,401 @@
 # Results
+
+## Searching for trends
+
+The line chart below shows historical changes in newly approved license application volumes from 2017 to March 2021, aggregated to monthly frequency and mapped to five boroughs by zip codes. The shading represents the period since the onset of the pandemic. Across the five boroughs, the impact of the pandemic is clearly visible, with new applications dropping sharply around the end-March of 2020. The troughs of this sharp drop were in April 2020 during the first lockdowns in spring. Afterward, the volume of new licenses has improved steadily in the Bronx, Brooklyn, Manhattan, and Queens. The volume in Staten Island, however, did not show much improvement. Over the winter, NYC including Staten Island saw substantial increases in newly approved licenses.
+
+```{r}
+library(tidyverse)
+library(RColorBrewer)
+library(lubridate)
+
+boroughpal = brewer.pal(5, "Set1")
+
+ny_license_monthly <- ny_license %>% mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    group_by(borough, months) %>% 
+    summarize(count=n())
+
+ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.minor = element_blank()) +
+    geom_rect(xmin=as.Date("2020-03-01"), xmax=as.Date("2021-06-01"), 
+            ymin=-Inf, ymax=Inf, fill="#F5F5F5", alpha=0.05, col = "#F5F5F5") +
+    geom_line(size = 0.7 ) +
+    labs(title = "Approved license applications by NYC boroughs",
+         x = "Years", y = "Count", color = "Borough") +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year") + 
+    scale_color_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" ))
+```
+
+### New application vs. renewal
+
+In the preceding chart, there are distinct jumps in applications close to end-2017 and end-2019. The two year gap between the two spikes of very similar magnitude suggests a cyclical factor driving this behavior. It turns out that most of these jumps are driven by a large flow of applications for renewals of special licenses such as home improvement contracting and sales businesses. According to the city [regulation]("https://www1.nyc.gov/site/dca/businesses/license-checklist-home-improvement-contractor.page"), home improvement contractors must renew their licenses every two years. The license data indicate there are 60 industries that the city grants licenses to. The bar chart below shows top 10 industries that receive licenses from the city since 2016, as a percent share of the total number approved licenses (there are about 185 thousand records across 60 industries). Among those, home improvement is at the top, accounting for more than 15% of all licenses authorized. 
+
+``` {r}
+ny_license %>% 
+    filter(status == "Issued") %>%  
+    group_by(license_category) %>% 
+    summarize(count = n()) %>% 
+    mutate(industry = fct_reorder(license_category, count, .desc = FALSE)) %>% 
+    arrange(desc(count)) %>% 
+    mutate(pshare = (count / sum(count)) * 100) %>% 
+    slice(1:10) %>% 
+    ggplot(aes(y=industry, x=pshare)) + 
+    geom_bar(stat = "identity", fill = "#3182BD", color="black") +
+    scale_x_continuous(sec.axis = dup_axis(name = "")) +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.major.y = element_blank()) +
+    labs(title = "Top 10 approved business license categories since 2016",
+         x = "Percent of total (60 industries in total, about 185 thousand records)", y= "")
+```
+
+Excluding renewal applications, the damage of the pandemic on the local economy appears more starkly (see chart below). Applications for new business licenses dropped sharply and the recovery so far appears weak. Starting a new business takes a lot of resources and risk. Uncertain business outlook due to the ongoing pandemic probably discouraged many potential new businesses from entering the market. The shaded region in the chart denotes the period since the beginning of the pandemic in March 2020.
+
+``` {r}
+# Alternative
+ny_license_monthly <- ny_license %>% filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    group_by(borough, months) %>% 
+    summarize(count=n())
+
+ny_license_monthly %>% ggplot(aes(x=months, y=count, color=borough)) +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.minor = element_blank()) +
+    geom_rect(xmin=as.Date("2020-03-01"), xmax=as.Date("2021-06-01"), 
+            ymin=-Inf, ymax=Inf, fill="#F5F5F5", alpha=0.05, col = "#F5F5F5") +
+    geom_line(size = 0.7 ) +
+    labs(title = "Approved license applications by NYC boroughs, excluding renewals",
+         x = "Years", y = "Count", color = "Borough") +
+    scale_x_date(date_labels = "%Y", date_breaks = "1 year") + 
+    scale_color_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" ))
+```
+
+Moreover, the chart highlights the uneven recovery among the five boroughs. While Queens, Brooklyn, and Manhattan showed improvement over last summer and winter, the recovery in the Bronx and Staten Island lags other boroughs.
+
+Note that the spike in authorized applications for new licenses close to the end of 2017 was due to a [change in city regulation](https://www1.nyc.gov/office-of-the-mayor/news/740-17/mayor-changes-laundry-license-application-requirements) governing licenses for laundry businesses, rather than a meaningful jump in demand for this business.
+
+It is also noteworthy that large shares of applications for new licenses originate from outer-boroughs, which contradict a common perception that Manhattan is the business district of the city. The bar chart below shows that Brooklyn and Queens led approved applications for new licenses since 2016. Here, bars corresponding to boroughs are arranged in descending order.
+
+```{r}
+library(tidyverse)
+ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
+  filter(status == "Issued") %>%  
+  group_by(borough) %>% 
+  summarise(count=n()) %>% 
+    ggplot(aes(x = reorder(borough, -count), y = count, fill = reorder(borough, count))) +
+    # ggplot(aes(x = borough, y = count)) + 
+    geom_bar(stat = 'identity', color = "black") +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.major.x = element_blank()) +
+    scale_y_continuous(sec.axis = dup_axis(name = "")) +
+    scale_fill_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" )) +
+    labs(title = "Approved applications for new licenses by boroughs since 2016",
+         x = "Boroughs", y = "Counts", fill = "Borough") +
+    guides(fill = guide_legend(reverse = FALSE))
+
+```
+
+### Seasonality in data
+
+Time series of business data often display seasonality. We first show the time series of applications for new licenses in all of NYC by year in one chart. The lines for 2020 and 2021 are substantially below the lines for other years, reflecting the impact of the pandemic. The data for November 2017 through April 2018 were affected by a one-off change in license regulation, as discussed above. Overall, the chart below indicates new business application tends to rise in spring and gradually slows over the summer and winter.
+
+```{r message = FALSE}
+month_year_lic = ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
+  mutate(start_month=format(start_date, "%m"), 
+         start_year=format(start_date, "%Y")) %>% 
+  group_by(start_year, start_month) %>% 
+  summarize(count=n())
+
+ggplot(data = month_year_lic, 
+            aes(x = start_month, y = count, 
+                group = start_year, color = start_year)) + 
+  geom_line() +
+  labs(title = "Seasonal plot of license applications in each month",
+       subtitle = "From 2017 to 2021", y = "Count", x = "Months", color = "Year") +
+  theme_light()
+```
+
+Afterward, we aggregate these lines together by month to summarize seasonal behavior by month. Below, we summarize the seasonal behavior of the data by month using a subset of the data between 2016 and 2019 as the pandemic brought a shift in trend in our data in 2020. This chart shows a seasonal pattern more succinctly. The median value for each month, represented by the horizontal line in each box, is a good proxy for the seasonal pattern of the data. High upper whiskers in April and November are due to distortions caused by policy changes in the period between November 2017 and April 2018.
+
+``` {r}
+temp <- ny_license %>% filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    group_by(months) %>% 
+  summarise(applications = n()) %>% 
+  filter(months < as.Date("2020-01-01", format="%Y-%m-%d"))
+ny_license_ts <- ts(temp$applications, frequency = 12, start = c(2016,1), end = c(2019,12))
+
+boxplot(ny_license_ts ~ cycle(ny_license_ts), xlab = "Month", ylab = "Count", ann = TRUE, col = "#3182BD",
+        main = "Boxplot of the number of approved new licenses by month")
+```
+
+``` {r, eval=FALSE}
+library(xts)
+temp <-  ny_license %>% filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    group_by(months) %>% summarise(applications = n())
+ny_license_xts <- xts(temp$applications, temp$months)
+# Plot a sub-sample from 2016 to 2019
+monthplot(ny_license_xts["2016/2019"], ylab = "Count by month", labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+```
+
+## Scaling the impact of the pandemic
+
+To measure the impact of the pandemic, we need a baseline, estimated during the period prior to the pandemic. We calculate monthly baseline levels by borough by taking the median count of approved applications for new licenses by month between 2016 and 2019. For example, the baseline level of approved business applications for Brooklyn in March is calculated as the median of the sums of approved applications for new licenses in Brooklyn respectively in March 2016, March 2017, March 2018, and March 2019. The impact of the pandemic is calculated as the percent difference from these monthly median values by borough. 
+
+By comparing the more recent data month by month to the baseline, we can estimate the impact of the pandemic while avoiding seasonal distortions. The resulting metrics are shown below.
+
+``` {r}
+# Calculate the baseline (pre-COVID)
+precovid_license <- ny_license %>% 
+    filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    filter(months < as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+    mutate(start_month=format(start_date, "%m"), 
+           start_year=format(start_date, "%Y")) %>% 
+    group_by(start_year, start_month, borough) %>% 
+    # Get a table of sums of application by year, month and borough
+    summarize(applications=n()) %>% 
+    # Take the median by borough and month across years
+    group_by(borough, start_month) %>% 
+    summarise(med = median(applications)) 
+
+# Post-COVID data
+postcovid_license <- ny_license %>% 
+    filter(application_or_renewal == "Application") %>% 
+    mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+    filter(months >=  as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+    mutate(start_month=format(start_date, "%m"), 
+           start_year=format(start_date, "%Y")) %>% 
+    group_by(start_year, start_month, borough) %>% summarize(count=n())
+
+postcovid_license <- postcovid_license %>%
+    pivot_wider(id_cols = c(borough,start_month), names_from = start_year, values_from = count) %>% 
+    arrange(borough)
+colnames(postcovid_license)[3:4] <- c("y2020", "y2021")
+
+# Combine the two dataframes
+combined <- inner_join(precovid_license, postcovid_license, by=c("borough", "start_month"))
+combined <- combined %>% mutate(pc2020 = y2020/med*100-100, pc2021 = y2021/med*100-100)
+
+# The impact is calculated here and saved in a long data format
+impact <- combined %>% 
+    select(borough, start_month, pc2020, pc2021) %>%
+    pivot_longer(cols = starts_with("pc"), names_to = "year", values_to = "impact" ) %>%
+    arrange(borough, year) %>% 
+    mutate(months = as.Date(paste(gsub("pc", "", year), start_month, "01", sep="-" ), format="%Y-%m-%d") )
+
+impact %>% filter(months < as.Date("2021-04-01", format = "%Y-%m-%d")) %>% 
+    ggplot(aes(x=months, y=impact, color=borough)) +
+    theme_bw() +
+    theme(panel.grid.major = element_line(colour = "#D3D3D3")) +
+    theme(panel.grid.minor = element_blank()) +
+    geom_line(size = 0.7) +
+    labs(title = "Impact of pandemic on the approved license applications by NYC boroughs",
+         x = "", y = "Change from baseline (%)", color = "Borough") +
+    scale_x_date(date_labels = "%b-%y", date_breaks = "3 month") +
+    scale_color_manual(values = boroughpal,
+                       limits = c("Brooklyn", "Queens", "Manhattan", "Bronx", "Staten_Island" ))
+```
+
+The chart above highlights a substantial drop in newly approved licenses during the spring lockdown in 2020. While these measures have improved since then, they remain at a very low level across the five boroughs, suggesting a long road to recovery for NYC.
+
+## Do demographic factors matter in recovery?
+
+Against the backdrop of accelerating vaccine distribution, we hope to examine the relationship between demographic variables and recovery since the spring lockdown in 2020. We draw demographic information from the Census Bureau's latest 2019 American Community Survey (ACS) corresponding to NYC Community Districts, which roughly correspond to areas commonly known as "neighborhoods." We used these disaggregated data instead of borough level aggregates for a more robust analysis as there are 55 Community Districts in total. The three demographic variables from the ACS we consider are
+
+- `Broadband`: Percent of households in a region with a broadband internet access,
+- `Education`: Percent of population aged 25+ with bachelors' degree or higher,
+- `Poverty`: Percent of people living below the federally defined poverty threshold.
+
+To examine the relationship between these variables and the recovery in the volume of approved license applications for new businesses, we first constructed measures of the pandemic impact on applications for new business licenses for each of 55 neighborhoods following the same methodology that we used to calculate the measures for the five boroughs. To measure the "recovery" in each area, we take the difference between the average levels of the impact during April-June 2020 and January-March 2021. The chart below shows scatterplots of the demographic variables listed above and the recovery by neighborhood, with lines representing best fits estimated with simple least square estimators. 
+
+``` {r}
+# Calculate the baseline (pre-COVID)
+precovid_license_puma <- ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
+  mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+  filter(months < as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+  mutate(start_month=format(start_date, "%m"), 
+         start_year=format(start_date, "%Y")) %>% 
+  group_by(start_year, start_month, puma10) %>% 
+  # Get a table of sums of application by year, month and puma10
+  summarize(applications=n()) %>% 
+  # Take the median by puma10 and month across years
+  group_by(puma10, start_month) %>% 
+  summarise(med = median(applications)) 
+
+# Post-COVID data
+postcovid_license_puma <- ny_license %>% 
+  filter(application_or_renewal == "Application") %>% 
+  mutate(months = as.Date(floor_date(start_date, "month"), format="%Y-%m-%d")) %>% 
+  filter(months >=  as.Date("2020-01-01", format="%Y-%m-%d")) %>% 
+  mutate(start_month=format(start_date, "%m"), 
+         start_year=format(start_date, "%Y")) %>% 
+  group_by(start_year, start_month, puma10) %>% summarize(count=n())
+
+postcovid_license_puma <- postcovid_license_puma %>%
+  pivot_wider(id_cols = c(puma10,start_month), names_from = start_year, values_from = count) %>% 
+  arrange(puma10)
+colnames(postcovid_license_puma)[3:4] <- c("y2020", "y2021")
+
+# Combine the two dataframes
+combined_puma <- inner_join(precovid_license_puma, postcovid_license_puma, by=c("puma10", "start_month"))
+combined_puma <- combined_puma %>% mutate(pc2020 = y2020/med*100-100, pc2021 = y2021/med*100-100)
+
+# The impact is calculated here and saved in a long data format
+impact_puma <- combined_puma %>% 
+  select(puma10, start_month, pc2020, pc2021) %>%
+  pivot_longer(cols = starts_with("pc"), names_to = "year", values_to = "impact" ) %>%
+  arrange(puma10, year) %>% 
+  mutate(months = as.Date(paste(gsub("pc", "", year), start_month, "01", sep="-" ), format="%Y-%m-%d") )
+
+# latest_impact_puma <- impact_puma %>% filter(months == as.Date("2021-03-01", format = "%Y-%m-%d"))
+latest_impact_puma <- impact_puma %>% 
+    filter(year == "pc2021") %>% 
+    drop_na(impact) %>% 
+    group_by(puma10) %>% 
+    summarise(impact = mean(impact))
+
+apr20_impact_puma <- impact_puma %>% 
+    filter(year == "pc2020",
+           months >= as.Date("2020-04-01", format = "%Y-%m-%d"),
+           months <= as.Date("2020-06-01", format = "%Y-%m-%d")) %>% 
+    drop_na(impact) %>% 
+    group_by(puma10) %>% 
+    summarise(impact = mean(impact))
+
+diff_impact_puma <- left_join(latest_impact_puma, apr20_impact_puma, by=c("puma10"="puma10"))
+diff_impact_puma <- diff_impact_puma %>% mutate(diff = impact.x - impact.y)
+latest_impact_puma_acs <- left_join(ny_acs, diff_impact_puma, by = c("puma10"="puma10"))
+
+# latest_impact_puma_acs <- left_join(ny_acs, latest_impact_puma, by = c("puma10"="puma10"))
+
+library(lattice)
+
+my.settings <- list(
+  par.main.text = list(font = 1, # make it bold
+                       just = "left", 
+                       x = grid::unit(5, "mm")))
+
+xyplot(diff ~ estimate | varlab, 
+       data = latest_impact_puma_acs, type = c("p", "r"),
+       # scales = list(tck = c(1,1), alternating=1),
+       ylab = "Recovery (percentage point)", xlab = "Estimate (% of the sample in a neighborhood)",
+       par.settings=my.settings, main = "Recovery since spring 2020 by NYC neighborhood")
+```
+
+The chart above indicates that the best fit lines with `Education` and `Broadband` as explanatory variables and recovery since April-June 2020 are downward sloping. That is, the higher the percent share of the population with education level at or above bachelor's degree and the percent share of households with high-speed broadband access, the lower the recovery has been. With poverty as an explanatory variable, the best fit line is upward sloping, meaning that the higher the share of the population living under poverty, the stronger the recovery has been.
+
+This result may sound counterintuitive to some. However, this result could be due to the fact that many NYC residents with more financial resources have exited the city during the extended period of lockdown since spring 2020.
+
+The following chart is a choropleth map of NYC with the fill color showing the degree of recovery since spring 2020. This chart shows that while neighborhoods outside Manhattan may have been initially hit more harshly by the pandemic, their recovery since spring 2020 has been more robust than neighborhoods in Manhattan.
+
+``` {r}
+library(rgdal)    # for readOGR and others
+library(sp) 
+library(jsonlite)
+library(maptools)
+library(mapproj)
+
+# Geo JSON
+base_url <-"https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/NYC_Public_Use_Microdata_Areas_PUMAs/FeatureServer/0/query?where=1=1&outFields=*&outSR=4326&f=geojson"
+NYCdistricts <- readOGR(base_url, 'OGRGeoJSON', verbose = FALSE)
+
+# Add preceding zero to puma codes
+NYCdistricts@data$puma10 <- paste0("0",NYCdistricts@data$PUMA)
+
+# Combine data
+ggNYCdistricts <- fortify(NYCdistricts, region = "puma10") 
+
+# Join tabular data
+ggNYCdistricts <- left_join(ggNYCdistricts, inner_join(diff_impact_puma, ny_acs_wide, by="puma10") , by=c("id"="puma10"))
+
+ggplot(ggNYCdistricts, aes(x=long, y=lat)) +
+    geom_polygon(aes(group = group, fill=diff, color = 'grey')) +
+    scale_fill_distiller(palette = "YlGnBu", direction=1, na.value = 'grey') +
+    theme_bw() +
+    labs(title = "Recovery since spring 2020",
+        subtitle = "(difference in COVID impact between now and then)",
+         x = "Longitude", y = "Latitude", fill = "Percentage point", color = "" ) +
+    scale_color_manual(values = 'Grey', labels = 'Missing value') +
+    guides(color = guide_legend(override.aes = list(fill = 'grey')))
+
+# Output the file (don't run again)
+# temp <- NYCdistricts
+# temp@data <- left_join(temp@data, inner_join(diff_impact_puma, ny_acs_wide, by="puma10") , by="puma10")
+# 
+# temp <- select(temp, long, lat, order, hole, piece, id, group, diff)
+# topostring <- geojsonio::topojson_json(
+#     input = NYCdistricts, lat = "lat", long = "long", geometry= "polygon" )
+# write(topostring, file = "NYC_topostring.json")
+
+```
+
+In particular, neighborhoods that are relatively residential compared to others, usually farther out in the Bronx, Queens, and Brooklyn have shown stronger recoveries. The recovery in neighborhoods that are more commercial such as Financial District and Downtown Brooklyn is lagging, reflecting a shift in lifestyle since the pandemic. With a large share of office workers yet to return to offices, the recovery in these areas might take longer. Note that the neighborhood boundary lines mapped above follow the Census Bureau's Public Use Microdata Area (PUMA). While NYC neighborhoods generally correlate with PUMA, some multiple neighborhoods can be bucketed together into one larger PUMA. Check this [link](https://www1.nyc.gov/assets/planning/download/pdf/data-maps/nyc-population/census2010/puma_cd_map.pdf) for an official mapping between Community Districts and PUMA by NYC officials. 
+
+## Operating businesses in NYC
+
+```{r}
+ny_business = ny_business %>% 
+  mutate(license_creation_date = as.Date(license_creation_date),
+         lic_expir_dd = as.Date(lic_expir_dd)) %>% 
+  filter(license_creation_date <= lic_expir_dd) %>% # some weird data here, creation should be earlier than expiration
+  drop_na(license_creation_date, lic_expir_dd)
+```
+
+```{r}
+mon_seq <- function(start, end){
+  seq(start, end, by = "month")
+}
+countMonthActive = data.frame(format(do.call("c", mapply(mon_seq, 
+                                      ny_business$license_creation_date, 
+                                      ny_business$lic_expir_dd)), "%Y-%m") %>% table)
+colnames(countMonthActive) = c("Date", "Count")
+month_year_busi = countMonthActive %>% 
+  mutate(Date = as.character(Date)) %>% 
+  mutate(Date = paste0(Date, "-01")) %>% 
+  mutate(Date = as.Date(Date)) %>% 
+  filter(Date > as.Date('2017-01-01')) %>% 
+  mutate(month=format(Date, "%m"), 
+         year=format(Date, "%Y"))
+```
+
+Here we investigate the number of operating businesses in NYC, using previous four years as references. As we can see that operating businesses with NYC mailing addresses are declining over years, and 2020 shows the most dramatic decline of all, starting from March. Note that the numbers here only shows the businesses with NYC mailing addresses, so there could be many cases where the mailing addresses are out of NYC but still operate in NYC. Even so, we can still see a clear severe impact on these businesses since pandemic.   
+```{r}
+ggplot(data = month_year_busi, 
+            aes(x = month, y = Count, 
+                group = year, color = year)) + 
+  geom_line() +
+  labs(title = "Seasonal plot of operating businesses in each month",
+       subtitle = "From 2017 to 2021", color = "Year") +
+  theme_light()
+```
+
+
+``` {r}
+busiCount = business %>% group_by(industry) %>% 
+  summarize(count = n()) %>% 
+  mutate(industry = fct_reorder(industry, count, .desc = FALSE))
+```
+
+We find that within NYC, business license type is more common than licenses filed by individuals. In addition, a large majority of the licenses are issued in Bronx and Brooklyn. Surprisingly, there is no record from Staten Island. The lack of the entire borough suggests a potential data quality problem. It is also somewhat odd that there are so few records from Manhattan and Queens. We suspect that a possible explanation could be many of the license holders filed their initial paperwork using the addresses that are not in NYC. Those records will get dropped out during our data cleaning process. 
+
+
+``` {r}
+ny_business %>% 
+    ggplot(aes(x = address_city, y=..count.., fill=license_type)) + 
+    stat_count(geom="bar") +
+    labs(title = "Operating businesses by boroughs",
+         x = "Regions", y = "Counts", fill = "License type")  +
+  theme_light()
+```
